@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+    <h1>Sign Up</h1>
+    <div class="form-container">
+        <form method="POST" action="{{ url_for('auth.signup') }}">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.username.label }}
+                {{ form.username(size=32) }}
+            </div>
+            <div class="form-group">
+                {{ form.email.label }}
+                {{ form.email(size=64) }}
+            </div>
+            <div class="form-group">
+                {{ form.password.label }}
+                {{ form.password(size=32) }}
+            </div>
+            <div class="form-group">
+                {{ form.confirm_password.label }}
+                {{ form.confirm_password(size=32) }}
+            </div>
+            <div class="form-group">
+                {{ form.submit(class="btn") }}
+            </div>
+        </form>
+    </div>
+    <p>Already have an account? <a href="{{ url_for('auth.login') }}">Click to Login</a></p>
+{% endblock %}
