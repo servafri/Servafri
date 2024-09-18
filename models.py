@@ -8,7 +8,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(255))
     vms = db.relationship('VM', backref='owner', lazy='dynamic')
-    balance = db.Column(db.Float, default=0.0)
+    balance = db.Column(db.Float, default=0.0, nullable=False)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

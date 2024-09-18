@@ -1,0 +1,60 @@
+TypeError
+TypeError: must be real number, not NoneType
+
+Traceback (most recent call last)
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 1498, in __call__
+return self.wsgi_app(environ, start_response)
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 1476, in wsgi_app
+response = self.handle_exception(e)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/flask_restful/__init__.py", line 298, in error_router
+return original_handler(e)
+       ^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 1473, in wsgi_app
+response = self.full_dispatch_request()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 882, in full_dispatch_request
+rv = self.handle_user_exception(e)
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/flask_restful/__init__.py", line 298, in error_router
+return original_handler(e)
+       ^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 880, in full_dispatch_request
+rv = self.dispatch_request()
+     ^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 865, in dispatch_request
+return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/flask_login/utils.py", line 290, in decorated_view
+return current_app.ensure_sync(func)(*args, **kwargs)
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/auth.py", line 56, in dashboard
+return render_template('dashboard.html', vms=vms, form=form, billing_form=billing_form)
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/flask/templating.py", line 150, in render_template
+return _render(app, template, context)
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/flask/templating.py", line 131, in _render
+rv = template.render(context)
+     ^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/jinja2/environment.py", line 1304, in render
+self.environment.handle_exception()
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/jinja2/environment.py", line 939, in handle_exception
+raise rewrite_traceback_stack(source=source)
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/templates/dashboard.html", line 1, in top-level template code
+{% extends "base.html" %}
+File "/home/runner/ServafriCloud/templates/base.html", line 41, in top-level template code
+{% block content %}{% endblock %}
+File "/home/runner/ServafriCloud/templates/dashboard.html", line 10, in block 'content'
+<p>Current Balance: ₦{{ "%.2f"|format(current_user.balance) }}</p>
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/jinja2/filters.py", line 1030, in do_format
+return soft_str(value) % (kwargs or args)
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: must be real number, not NoneType
+The debugger caught an exception in your WSGI application. You can now look at the traceback which led to the error.
+To switch between the interactive traceback and the plaintext one, you can click on the "Traceback" headline. From the text traceback you can also create a paste of it.
+
+Brought to you by DON'T PANIC, your friendly Werkzeug powered traceback interpreter.

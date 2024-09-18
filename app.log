@@ -3855,3 +3855,97 @@ INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:44:50] "[36mGET /login?__debugg
 INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:45:01] "[32mGET / HTTP/1.1[0m" 302 -
 INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:45:01] "GET /login HTTP/1.1" 200 -
 INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:45:02] "GET /static/css/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:45:22] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:45:22] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:45:22] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:50:26] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:50:27] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:50:27] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:50:31] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:50:31] "[36mGET /login?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:50:32] "[36mGET /login?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:50:32] "[36mGET /login?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:50:39] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:50:40] "GET /static/css/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:50:44] "[32mPOST /login HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:50:48] "[35m[1mGET /dashboard HTTP/1.1[0m" 500 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:50:48] "GET /dashboard?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:50:49] "GET /dashboard?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:50:49] "GET /dashboard?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:51:05] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:51:05] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:51:06] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:51:06] "GET /static/css/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:51:10] "[32mPOST /login HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:51:10] "[35m[1mGET /dashboard HTTP/1.1[0m" 500 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:51:11] "GET /dashboard?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:51:11] "GET /dashboard?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:51:11] "GET /dashboard?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in '/home/runner/ServafriCloud/models.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.74:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 833-355-089
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:52:35] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:52:35] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:53:00] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:53:01] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:53:01] "GET /static/css/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:53:18] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:53:19] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:53:20] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:53:28] "[32mGET /login HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:53:28] "[35m[1mGET /dashboard HTTP/1.1[0m" 500 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:53:30] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:53:30] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:53:37] "[35m[1mGET /dashboard HTTP/1.1[0m" 500 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:53:37] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:53:38] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:53:38] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:53:38] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:53:39] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:53:39] "[35m[1mGET /dashboard HTTP/1.1[0m" 500 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:53:40] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:53:40] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:53:40] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:53:40] "GET /static/css/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:53:53] "[32mPOST /login HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:53:54] "[35m[1mGET /dashboard HTTP/1.1[0m" 500 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:53:54] "GET /dashboard?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:53:54] "GET /dashboard?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+ERROR:flask_migrate:Error: Directory migrations already exists and is not empty
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:54:48] "[35m[1mGET /dashboard HTTP/1.1[0m" 500 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:54:48] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:54:49] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:54:49] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in '/home/runner/ServafriCloud/models.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 791-666-368
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.74:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 138-225-200
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:55:33] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:55:34] "GET /dashboard HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:55:34] "[32mGET /login HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:55:34] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:55:34] "GET /static/js/dashboard.js HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:55:34] "GET /dashboard HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:55:34] "[33mGET /api/vms HTTP/1.1[0m" 404 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:55:35] "GET /static/js/dashboard.js HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:55:35] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:55:36] "[33mGET /api/vms HTTP/1.1[0m" 404 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:55:43] "[32mGET /dashboard HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:55:43] "GET /login?next=/dashboard HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:55:43] "GET /static/css/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:55:54] "[32mPOST /payment HTTP/1.1[0m" 302 -
