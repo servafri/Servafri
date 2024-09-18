@@ -79,7 +79,7 @@ agentRequireRestartOnSave = false
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "flask db init && flask db migrate -m 'Add balance to User model' && flask db upgrade"
+args = "export FLASK_APP=main.py && flask db init && flask db migrate -m 'Add balance to User model' && flask db upgrade"
 
 [[workflows.workflow]]
 name = "Create Migration"
