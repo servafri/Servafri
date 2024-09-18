@@ -6,7 +6,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128))
+    password_hash = db.Column(db.String(255))
     vms = db.relationship('VM', backref='owner', lazy='dynamic')
 
     def set_password(self, password):
@@ -22,3 +22,4 @@ class VM(db.Model):
     ram = db.Column(db.Integer, nullable=False)
     disk_size = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    azure_id = db.Column(db.String(255), unique=True, nullable=False)

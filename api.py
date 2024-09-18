@@ -2,6 +2,7 @@ from flask_restful import Resource, reqparse
 from flask_login import current_user, login_required
 from models import VM
 from extensions import db
+from azure_utils import create_vm
 
 class VMResource(Resource):
     @login_required
@@ -18,11 +19,25 @@ class VMResource(Resource):
         parser.add_argument('disk_size', type=int, required=True)
         args = parser.parse_args()
 
-        vm = VM(name=args['name'], cpu_cores=args['cpu_cores'], ram=args['ram'], disk_size=args['disk_size'], user_id=current_user.id)
-        db.session.add(vm)
-        db.session.commit()
+        try:
+            # Create the VM in Azure
+            azure_vm = create_vm(args['name'], args['cpu_cores'], args['ram'], args['disk_size'])
 
-        return {'message': 'VM provisioned successfully', 'id': vm.id}, 201
+            # Store the VM information in our database
+            vm = VM(
+                name=azure_vm['name'],
+                cpu_cores=args['cpu_cores'],
+                ram=args['ram'],
+                disk_size=args['disk_size'],
+                user_id=current_user.id,
+                azure_id=azure_vm['id']
+            )
+            db.session.add(vm)
+            db.session.commit()
+
+            return {'message': 'VM provisioned successfully', 'id': vm.id, 'azure_id': azure_vm['id']}, 201
+        except Exception as e:
+            return {'message': f'Error provisioning VM: {str(e)}'}, 500
 
 def initialize_api(api):
     api.add_resource(VMResource, '/api/vms')

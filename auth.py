@@ -1,9 +1,10 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, login_required, current_user
 from urllib.parse import urlparse
-from extensions import db
 from models import User, VM
 from forms import LoginForm, SignupForm, VMProvisionForm
+from extensions import db
+from azure_utils import create_vm
 
 auth = Blueprint('auth', __name__)
 
@@ -22,7 +23,7 @@ def login():
         if not next_page or urlparse(next_page).netloc != '':
             next_page = url_for('auth.dashboard')
         return redirect(next_page)
-    return render_template('login.html', form=form)
+    return render_template('login.html', title='Sign In', form=form)
 
 @auth.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -56,16 +57,24 @@ def dashboard():
 def provision_vm():
     form = VMProvisionForm()
     if form.validate_on_submit():
-        vm = VM(
-            name=form.name.data,
-            cpu_cores=form.cpu_cores.data,
-            ram=form.ram.data,
-            disk_size=form.disk_size.data,
-            user_id=current_user.id
-        )
-        db.session.add(vm)
-        db.session.commit()
-        flash('VM provisioned successfully!')
+        try:
+            # Create the VM in Azure
+            azure_vm = create_vm(form.name.data, form.cpu_cores.data, form.ram.data, form.disk_size.data)
+            
+            # Store the VM information in our database
+            vm = VM(
+                name=azure_vm['name'],
+                cpu_cores=form.cpu_cores.data,
+                ram=form.ram.data,
+                disk_size=form.disk_size.data,
+                user_id=current_user.id,
+                azure_id=azure_vm['id']
+            )
+            db.session.add(vm)
+            db.session.commit()
+            flash('VM provisioned successfully!', 'success')
+        except Exception as e:
+            flash(f'Error provisioning VM: {str(e)}', 'error')
     else:
-        flash('Error provisioning VM. Please check your input.')
+        flash('Error provisioning VM. Please check your input.', 'error')
     return redirect(url_for('auth.dashboard'))

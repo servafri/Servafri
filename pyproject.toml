@@ -13,6 +13,14 @@ flask-login = "^0.6.3"
 flask-restful = "^0.3.10"
 psycopg2-binary = "^2.9.9"
 flask-wtf = "^1.2.1"
+azure-mgmt-compute = "^33.0.0"
+azure-mgmt-network = "^26.0.0"
+azure-mgmt-resource = "^23.1.1"
+azure-identity = "^1.17.1"
+email-validator = "^2.2.0"
+flask-session = "^0.8.0"
+werkzeug = "^3.0.4"
+wtforms = "^3.1.2"
 
 
 [build-system]
