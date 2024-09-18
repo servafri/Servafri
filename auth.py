@@ -7,6 +7,9 @@ from extensions import db
 from azure_utils import create_vm
 from paystackapi.paystack import Paystack
 from datetime import datetime
+import requests
+import hmac
+import hashlib
 
 auth = Blueprint('auth', __name__)
 
@@ -61,10 +64,7 @@ def provision_vm():
     form = VMProvisionForm()
     if form.validate_on_submit():
         try:
-            # Create the VM in Azure
             azure_vm = create_vm(form.name.data, form.cpu_cores.data, form.ram.data, form.disk_size.data)
-            
-            # Store the VM information in our database
             vm = VM(
                 name=azure_vm['name'],
                 cpu_cores=form.cpu_cores.data,
@@ -90,12 +90,11 @@ def payment():
         try:
             paystack = Paystack(secret_key=current_app.config['PAYSTACK_SECRET_KEY'])
             response = paystack.transaction.initialize(
-                amount=int(form.amount.data * 100),  # Amount in kobo
+                amount=int(form.amount.data * 100),
                 email=form.email.data,
                 callback_url=url_for('auth.verify_payment', _external=True)
             )
             if response['status']:
-                # Create a new payment record
                 payment = Payment(
                     user_id=current_user.id,
                     amount=form.amount.data,
@@ -108,10 +107,16 @@ def payment():
                 return redirect(response['data']['authorization_url'])
             else:
                 flash('Error initializing payment. Please try again.', 'error')
+        except requests.exceptions.RequestException as e:
+            flash(f'Network error: Unable to connect to payment gateway. Please try again later.', 'error')
+        except KeyError as e:
+            flash(f'Unexpected response from payment gateway. Please try again or contact support.', 'error')
         except Exception as e:
-            flash(f'Error processing payment: {str(e)}', 'error')
+            flash(f'An unexpected error occurred: {str(e)}. Please try again or contact support.', 'error')
     else:
-        flash('Invalid form data. Please check your input.', 'error')
+        for field, errors in form.errors.items():
+            for error in errors:
+                flash(f'Error in {field}: {error}', 'error')
     return redirect(url_for('auth.dashboard'))
 
 @auth.route('/verify_payment')
@@ -123,12 +128,10 @@ def verify_payment():
             paystack = Paystack(secret_key=current_app.config['PAYSTACK_SECRET_KEY'])
             response = paystack.transaction.verify(reference)
             if response['status']:
-                # Update payment record
                 payment = Payment.query.filter_by(reference=reference).first()
                 if payment:
                     payment.status = 'success'
                     db.session.commit()
-                    # Update user balance
                     current_user.balance += payment.amount
                     db.session.commit()
                     flash('Payment successful! Your balance has been updated.', 'success')
@@ -136,8 +139,44 @@ def verify_payment():
                     flash('Payment verification failed. Please contact support.', 'error')
             else:
                 flash('Payment verification failed. Please try again or contact support.', 'error')
+        except requests.exceptions.RequestException as e:
+            flash(f'Network error: Unable to verify payment. Please check your account balance and contact support if needed.', 'error')
+        except KeyError as e:
+            flash(f'Unexpected response during payment verification. Please contact support.', 'error')
         except Exception as e:
-            flash(f'Error verifying payment: {str(e)}', 'error')
+            flash(f'An unexpected error occurred during payment verification: {str(e)}. Please contact support.', 'error')
     else:
         flash('Invalid payment reference.', 'error')
     return redirect(url_for('auth.dashboard'))
+
+@auth.route('/paystack_webhook', methods=['POST'])
+def paystack_webhook():
+    payload = request.data
+    signature = request.headers.get('X-Paystack-Signature')
+
+    if not signature:
+        return 'No signature', 400
+
+    secret = current_app.config['PAYSTACK_SECRET_KEY'].encode('utf-8')
+    computed_signature = hmac.new(secret, payload, hashlib.sha512).hexdigest()
+
+    if signature != computed_signature:
+        return 'Invalid signature', 400
+
+    event = request.json
+    if event and event['event'] == 'charge.success':
+        reference = event['data']['reference']
+        payment = Payment.query.filter_by(reference=reference).first()
+        if payment:
+            payment.status = 'success'
+            user = User.query.get(payment.user_id)
+            if user:
+                user.balance += payment.amount
+                db.session.commit()
+                return 'Webhook processed', 200
+            else:
+                return 'User not found', 404
+        else:
+            return 'Payment not found', 404
+    
+    return 'Webhook received', 200
