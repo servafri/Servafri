@@ -1,10 +1,11 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_user, logout_user, login_required, current_user
 from urllib.parse import urlparse
-from models import User, VM, Payment
-from forms import LoginForm, SignupForm, VMProvisionForm, BillingForm
+from models import User, VM, Payment, KubernetesDeployment
+from forms import LoginForm, SignupForm, VMProvisionForm, BillingForm, KubernetesDeploymentForm
 from extensions import db
 from azure_utils import create_vm
+from kubernetes_utils import create_deployment, list_deployments, delete_deployment
 from paystackapi.paystack import Paystack
 from datetime import datetime
 import requests
@@ -54,9 +55,12 @@ def logout():
 @login_required
 def dashboard():
     vms = VM.query.filter_by(user_id=current_user.id).all()
-    form = VMProvisionForm()
+    kubernetes_deployments = KubernetesDeployment.query.filter_by(user_id=current_user.id).all()
+    vm_form = VMProvisionForm()
     billing_form = BillingForm()
-    return render_template('dashboard.html', vms=vms, form=form, billing_form=billing_form)
+    kubernetes_form = KubernetesDeploymentForm()
+    return render_template('dashboard.html', vms=vms, kubernetes_deployments=kubernetes_deployments,
+                           vm_form=vm_form, billing_form=billing_form, kubernetes_form=kubernetes_form)
 
 @auth.route('/provision_vm', methods=['POST'])
 @login_required
@@ -80,6 +84,52 @@ def provision_vm():
             flash(f'Error provisioning VM: {str(e)}', 'error')
     else:
         flash('Error provisioning VM. Please check your input.', 'error')
+    return redirect(url_for('auth.dashboard'))
+
+@auth.route('/create_kubernetes_deployment', methods=['POST'])
+@login_required
+def create_kubernetes_deployment():
+    form = KubernetesDeploymentForm()
+    if form.validate_on_submit():
+        try:
+            success, message = create_deployment(form.name.data, form.image.data, form.replicas.data)
+            if success:
+                deployment = KubernetesDeployment(
+                    name=form.name.data,
+                    image=form.image.data,
+                    replicas=form.replicas.data,
+                    user_id=current_user.id,
+                    created_at=datetime.utcnow(),
+                    status='Created'
+                )
+                db.session.add(deployment)
+                db.session.commit()
+                flash('Kubernetes deployment created successfully!', 'success')
+            else:
+                flash(f'Error creating Kubernetes deployment: {message}', 'error')
+        except Exception as e:
+            flash(f'Error creating Kubernetes deployment: {str(e)}', 'error')
+    else:
+        flash('Error creating Kubernetes deployment. Please check your input.', 'error')
+    return redirect(url_for('auth.dashboard'))
+
+@auth.route('/delete_kubernetes_deployment/<int:deployment_id>', methods=['POST'])
+@login_required
+def delete_kubernetes_deployment(deployment_id):
+    deployment = KubernetesDeployment.query.filter_by(id=deployment_id, user_id=current_user.id).first()
+    if deployment:
+        try:
+            success, message = delete_deployment(deployment.name)
+            if success:
+                db.session.delete(deployment)
+                db.session.commit()
+                flash('Kubernetes deployment deleted successfully!', 'success')
+            else:
+                flash(f'Error deleting Kubernetes deployment: {message}', 'error')
+        except Exception as e:
+            flash(f'Error deleting Kubernetes deployment: {str(e)}', 'error')
+    else:
+        flash('Kubernetes deployment not found', 'error')
     return redirect(url_for('auth.dashboard'))
 
 @auth.route('/payment', methods=['POST'])

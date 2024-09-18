@@ -25,3 +25,9 @@ class BillingForm(FlaskForm):
     amount = DecimalField('Amount (in Naira)', validators=[DataRequired(), NumberRange(min=100)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     submit = SubmitField('Pay Now')
+
+class KubernetesDeploymentForm(FlaskForm):
+    name = StringField('Deployment Name', validators=[DataRequired(), Length(min=1, max=64)])
+    image = StringField('Docker Image', validators=[DataRequired()])
+    replicas = IntegerField('Number of Replicas', validators=[DataRequired(), NumberRange(min=1, max=10)])
+    submit = SubmitField('Create Deployment')

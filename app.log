@@ -3982,3 +3982,41 @@ INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 07:00:06] "[36mGET /static/css/sty
 INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 07:00:06] "[36mGET /static/js/dashboard.js HTTP/1.1[0m" 304 -
 INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 07:00:06] "[33mGET /api/vms HTTP/1.1[0m" 404 -
 INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 07:00:14] "[32mPOST /payment HTTP/1.1[0m" 302 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.74:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 308-624-701
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 07:01:21] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 07:01:22] "[32mGET /login HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 07:01:22] "GET /dashboard HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 07:01:23] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 07:01:23] "[36mGET /static/js/dashboard.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 07:01:24] "[33mGET /api/vms HTTP/1.1[0m" 404 -
+INFO:werkzeug: * Detected change in '/home/runner/ServafriCloud/models.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 993-166-903
+INFO:werkzeug: * Detected change in '/home/runner/ServafriCloud/api.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 362-817-383
+INFO:werkzeug: * Detected change in '/home/runner/ServafriCloud/auth.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.74:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 200-249-644
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 07:03:45] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 07:03:45] "[32mGET /login HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 07:03:46] "GET /dashboard HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 07:03:46] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 07:03:46] "[36mGET /static/js/dashboard.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 07:03:48] "[33mGET /api/vms HTTP/1.1[0m" 404 -

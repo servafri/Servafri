@@ -9,6 +9,7 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(255))
     vms = db.relationship('VM', backref='owner', lazy='dynamic')
     balance = db.Column(db.Float, default=0.0, nullable=False)
+    kubernetes_deployments = db.relationship('KubernetesDeployment', backref='owner', lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -32,3 +33,12 @@ class Payment(db.Model):
     reference = db.Column(db.String(255), unique=True, nullable=False)
     status = db.Column(db.String(20), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False)
+
+class KubernetesDeployment(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), nullable=False)
+    image = db.Column(db.String(255), nullable=False)
+    replicas = db.Column(db.Integer, default=1, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False)
+    status = db.Column(db.String(20), nullable=False)
