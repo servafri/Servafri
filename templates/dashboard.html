@@ -2,108 +2,265 @@
 
 {% block title %}Dashboard{% endblock %}
 
+{% block header %}Dashboard{% endblock %}
+
 {% block content %}
-    <h1>Welcome, {{ current_user.username }}!</h1>
     <div class="dashboard-container">
-        <section class="user-info">
-            <h2>Your Account</h2>
-            <p>Current Balance: ₦{{ "%.2f"|format(current_user.balance or 0) }}</p>
+        <section class="overview-section">
+            <h2>Overview</h2>
+            <div class="card-container">
+                <div class="card">
+                    <h3>Resource Usage</h3>
+                    <canvas id="resourceUsageChart"></canvas>
+                    <p>CPU: {{ cpu_usage }}%</p>
+                    <p>Memory: {{ memory_usage }}%</p>
+                    <p>Storage: {{ storage_usage }}%</p>
+                </div>
+                <div class="card">
+                    <h3>VM Status</h3>
+                    <canvas id="vmStatusChart"></canvas>
+                    <p>Total VMs: {{ vm_count }}</p>
+                    <p>Running VMs: {{ running_vm_count }}</p>
+                </div>
+                <div class="card">
+                    <h3>Billing Overview</h3>
+                    <canvas id="billingChart"></canvas>
+                    <p>Current Balance: ₦{{ "%.2f"|format(current_balance) }}</p>
+                    <p>Estimated Monthly Cost: ₦{{ "%.2f"|format(estimated_monthly_cost) }}</p>
+                </div>
+            </div>
         </section>
-        <section class="vm-list">
-            <h2>Your Provisioned VMs</h2>
-            {% if vms %}
-                <ul>
-                {% for vm in vms %}
-                    <li>{{ vm.name }} - CPU: {{ vm.cpu_cores }}, RAM: {{ vm.ram }}GB, Disk: {{ vm.disk_size }}GB</li>
-                {% endfor %}
-                </ul>
-            {% else %}
-                <p>You haven't provisioned any VMs yet.</p>
-            {% endif %}
+
+        <section class="detailed-analytics">
+            <h2>Detailed Analytics</h2>
+            <div class="card-container">
+                <div class="card">
+                    <h3>Historical Resource Usage</h3>
+                    <canvas id="historicalUsageChart"></canvas>
+                </div>
+                <div class="card">
+                    <h3>VM Type Distribution</h3>
+                    <canvas id="vmTypeChart"></canvas>
+                </div>
+                <div class="card">
+                    <h3>Network Traffic (Last 24 Hours)</h3>
+                    <canvas id="networkTrafficChart"></canvas>
+                </div>
+            </div>
         </section>
-        <section class="kubernetes-list">
-            <h2>Your Kubernetes Deployments</h2>
-            {% if kubernetes_deployments %}
-                <ul>
-                {% for deployment in kubernetes_deployments %}
-                    <li>
-                        {{ deployment.name }} - Image: {{ deployment.image }}, Replicas: {{ deployment.replicas }}, Status: {{ deployment.status }}
-                        <form action="{{ url_for('auth.delete_kubernetes_deployment', deployment_id=deployment.id) }}" method="POST" style="display: inline;">
-                            <input type="submit" value="Delete" onclick="return confirm('Are you sure you want to delete this deployment?');">
-                        </form>
-                    </li>
-                {% endfor %}
-                </ul>
-            {% else %}
-                <p>You haven't created any Kubernetes deployments yet.</p>
-            {% endif %}
-        </section>
-        <section class="provision-form">
-            <h2>Provision a New VM</h2>
-            <form method="POST" action="{{ url_for('auth.provision_vm') }}">
-                {{ vm_form.hidden_tag() }}
-                <div class="form-group">
-                    {{ vm_form.name.label }}
-                    {{ vm_form.name() }}
-                </div>
-                <div class="form-group">
-                    {{ vm_form.cpu_cores.label }}
-                    {{ vm_form.cpu_cores() }}
-                </div>
-                <div class="form-group">
-                    {{ vm_form.ram.label }}
-                    {{ vm_form.ram() }}
-                </div>
-                <div class="form-group">
-                    {{ vm_form.disk_size.label }}
-                    {{ vm_form.disk_size() }}
-                </div>
-                <div class="form-group">
-                    {{ vm_form.submit() }}
-                </div>
-            </form>
-        </section>
-        <section class="kubernetes-form">
-            <h2>Create a Kubernetes Deployment</h2>
-            <form method="POST" action="{{ url_for('auth.create_kubernetes_deployment') }}">
-                {{ kubernetes_form.hidden_tag() }}
-                <div class="form-group">
-                    {{ kubernetes_form.name.label }}
-                    {{ kubernetes_form.name() }}
-                </div>
-                <div class="form-group">
-                    {{ kubernetes_form.image.label }}
-                    {{ kubernetes_form.image() }}
-                </div>
-                <div class="form-group">
-                    {{ kubernetes_form.replicas.label }}
-                    {{ kubernetes_form.replicas() }}
-                </div>
-                <div class="form-group">
-                    {{ kubernetes_form.submit() }}
-                </div>
-            </form>
-        </section>
-        <section class="billing-form">
-            <h2>Add Funds to Your Account</h2>
-            <form method="POST" action="{{ url_for('auth.payment') }}">
-                {{ billing_form.hidden_tag() }}
-                <div class="form-group">
-                    {{ billing_form.amount.label }}
-                    {{ billing_form.amount() }}
-                </div>
-                <div class="form-group">
-                    {{ billing_form.email.label }}
-                    {{ billing_form.email() }}
-                </div>
-                <div class="form-group">
-                    {{ billing_form.submit() }}
-                </div>
-            </form>
+
+        <section class="vm-management">
+            <h2>Virtual Machine Management</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>CPU Cores</th>
+                        <th>RAM (GB)</th>
+                        <th>Disk Size (GB)</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vm in vms %}
+                    <tr>
+                        <td>{{ vm.name }}</td>
+                        <td>{{ vm.cpu_cores }}</td>
+                        <td>{{ vm.ram }}</td>
+                        <td>{{ vm.disk_size }}</td>
+                        <td>{{ vm.status }}</td>
+                        <td>
+                            <button class="btn btn-sm btn-primary vm-action" data-action="start" data-vm-id="{{ vm.id }}">Start</button>
+                            <button class="btn btn-sm btn-warning vm-action" data-action="stop" data-vm-id="{{ vm.id }}">Stop</button>
+                            <button class="btn btn-sm btn-danger vm-action" data-action="delete" data-vm-id="{{ vm.id }}">Delete</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </section>
     </div>
-{% endblock %}
 
-{% block extra_js %}
-    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Resource Usage Chart
+        var ctxResource = document.getElementById('resourceUsageChart').getContext('2d');
+        var resourceChart = new Chart(ctxResource, {
+            type: 'doughnut',
+            data: {
+                labels: ['CPU', 'Memory', 'Storage'],
+                datasets: [{
+                    data: [{{ cpu_usage }}, {{ memory_usage }}, {{ storage_usage }}],
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                }]
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Resource Usage'
+                }
+            }
+        });
+
+        // VM Status Chart
+        var ctxVM = document.getElementById('vmStatusChart').getContext('2d');
+        var vmChart = new Chart(ctxVM, {
+            type: 'pie',
+            data: {
+                labels: ['Running', 'Stopped'],
+                datasets: [{
+                    data: [{{ running_vm_count }}, {{ vm_count - running_vm_count }}],
+                    backgroundColor: ['#36A2EB', '#FFCE56']
+                }]
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'VM Status'
+                }
+            }
+        });
+
+        // Billing Chart
+        var ctxBilling = document.getElementById('billingChart').getContext('2d');
+        var billingChart = new Chart(ctxBilling, {
+            type: 'bar',
+            data: {
+                labels: ['Current Balance', 'Estimated Monthly Cost'],
+                datasets: [{
+                    label: 'Amount (₦)',
+                    data: [{{ current_balance }}, {{ estimated_monthly_cost }}],
+                    backgroundColor: ['#4BC0C0', '#FF6384']
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Billing Overview'
+                }
+            }
+        });
+
+        // Historical Resource Usage Chart
+        var ctxHistorical = document.getElementById('historicalUsageChart').getContext('2d');
+        var historicalChart = new Chart(ctxHistorical, {
+            type: 'line',
+            data: {
+                labels: {{ historical_data.dates|tojson }},
+                datasets: [{
+                    label: 'CPU Usage',
+                    data: {{ historical_data.cpu|tojson }},
+                    borderColor: '#FF6384',
+                    fill: false
+                }, {
+                    label: 'Memory Usage',
+                    data: {{ historical_data.memory|tojson }},
+                    borderColor: '#36A2EB',
+                    fill: false
+                }, {
+                    label: 'Storage Usage',
+                    data: {{ historical_data.storage|tojson }},
+                    borderColor: '#FFCE56',
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Historical Resource Usage'
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }
+            }
+        });
+
+        // VM Type Distribution Chart
+        var ctxVMType = document.getElementById('vmTypeChart').getContext('2d');
+        var vmTypeChart = new Chart(ctxVMType, {
+            type: 'pie',
+            data: {
+                labels: {{ vm_types|tojson }},
+                datasets: [{
+                    data: {{ vm_type_distribution|tojson }},
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                }]
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'VM Type Distribution'
+                }
+            }
+        });
+
+        // Network Traffic Chart
+        var ctxNetworkTraffic = document.getElementById('networkTrafficChart').getContext('2d');
+        var networkTrafficChart = new Chart(ctxNetworkTraffic, {
+            type: 'line',
+            data: {
+                labels: Array.from({length: 24}, (_, i) => i + ':00'),
+                datasets: [{
+                    label: 'Incoming Traffic',
+                    data: {{ network_traffic.incoming|tojson }},
+                    borderColor: '#36A2EB',
+                    fill: false
+                }, {
+                    label: 'Outgoing Traffic',
+                    data: {{ network_traffic.outgoing|tojson }},
+                    borderColor: '#FF6384',
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Network Traffic (Last 24 Hours)'
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // VM Action Buttons
+        document.querySelectorAll('.vm-action').forEach(button => {
+            button.addEventListener('click', function() {
+                const action = this.dataset.action;
+                const vmId = this.dataset.vmId;
+                // Send AJAX request to perform the action
+                fetch(`/api/vm/${vmId}/${action}`, { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(`VM ${action} successful`);
+                            location.reload(); // Reload the page to reflect changes
+                        } else {
+                            alert(`Failed to ${action} VM: ${data.message}`);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert(`An error occurred while trying to ${action} the VM`);
+                    });
+            });
+        });
+    </script>
 {% endblock %}
