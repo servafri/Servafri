@@ -4,10 +4,12 @@ from extensions import db
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), index=True, unique=True)
-    email = db.Column(db.String(120), index=True, unique=True)
-    password_hash = db.Column(db.String(128))
-    balance = db.Column(db.Float, nullable=True, default=0.0)
+    username = db.Column(db.String(64), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(255))
+    vms = db.relationship('VM', backref='owner', lazy='dynamic')
+    balance = db.Column(db.Float, default=0.0, nullable=False)
+    kubernetes_deployments = db.relationship('KubernetesDeployment', backref='owner', lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -23,7 +25,6 @@ class VM(db.Model):
     disk_size = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     azure_id = db.Column(db.String(255), unique=True, nullable=False)
-    status = db.Column(db.String(20), nullable=False, default='stopped')
 
 class Payment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
