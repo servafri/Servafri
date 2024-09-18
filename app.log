@@ -3969,3 +3969,16 @@ INFO:werkzeug: * Debugger PIN: 968-383-543
 INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:59:25] "[32mGET / HTTP/1.1[0m" 302 -
 INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:59:25] "GET /login HTTP/1.1" 200 -
 INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:59:25] "GET /static/css/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:59:42] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:59:42] "[32mGET /login HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:59:43] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:59:43] "[32mGET /login HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:59:43] "GET /dashboard HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:59:44] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:59:44] "[36mGET /static/js/dashboard.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 06:59:46] "[33mGET /api/vms HTTP/1.1[0m" 404 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 07:00:05] "GET /dashboard HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 07:00:06] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 07:00:06] "[36mGET /static/js/dashboard.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 07:00:06] "[33mGET /api/vms HTTP/1.1[0m" 404 -
+INFO:werkzeug:172.31.196.74 - - [18/Sep/2024 07:00:14] "[32mPOST /payment HTTP/1.1[0m" 302 -
