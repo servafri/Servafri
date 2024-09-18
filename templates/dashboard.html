@@ -5,6 +5,10 @@
 {% block content %}
     <h1>Welcome, {{ current_user.username }}!</h1>
     <div class="dashboard-container">
+        <section class="user-info">
+            <h2>Your Account</h2>
+            <p>Current Balance: ₦{{ "%.2f"|format(current_user.balance) }}</p>
+        </section>
         <section class="vm-list">
             <h2>Your Provisioned VMs</h2>
             {% if vms %}
@@ -39,6 +43,23 @@
                 </div>
                 <div class="form-group">
                     {{ form.submit() }}
+                </div>
+            </form>
+        </section>
+        <section class="billing-form">
+            <h2>Add Funds to Your Account</h2>
+            <form method="POST" action="{{ url_for('auth.payment') }}">
+                {{ billing_form.hidden_tag() }}
+                <div class="form-group">
+                    {{ billing_form.amount.label }}
+                    {{ billing_form.amount() }}
+                </div>
+                <div class="form-group">
+                    {{ billing_form.email.label }}
+                    {{ billing_form.email() }}
+                </div>
+                <div class="form-group">
+                    {{ billing_form.submit() }}
                 </div>
             </form>
         </section>

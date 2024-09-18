@@ -15,3 +15,8 @@ api = Api(app)
 
 sess = Session()
 sess.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    from models import User
+    return User.query.get(int(user_id))

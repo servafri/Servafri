@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, IntegerField
+from wtforms import StringField, PasswordField, SubmitField, IntegerField, DecimalField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, NumberRange
 
 class LoginForm(FlaskForm):
@@ -20,3 +20,8 @@ class VMProvisionForm(FlaskForm):
     ram = IntegerField('RAM (GB)', validators=[DataRequired(), NumberRange(min=1, max=128)])
     disk_size = IntegerField('Disk Size (GB)', validators=[DataRequired(), NumberRange(min=10, max=1000)])
     submit = SubmitField('Provision VM')
+
+class BillingForm(FlaskForm):
+    amount = DecimalField('Amount (in Naira)', validators=[DataRequired(), NumberRange(min=100)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Pay Now')
