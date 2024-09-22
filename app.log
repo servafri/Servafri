@@ -4193,3 +4193,24 @@ INFO:werkzeug: * Debugger PIN: 975-305-272
 INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:32:13] "[32mGET / HTTP/1.1[0m" 302 -
 INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:32:13] "GET /login HTTP/1.1" 200 -
 INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:32:13] "GET /static/css/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:32:40] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:32:41] "[32mGET /login HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:32:42] "[35m[1mGET /dashboard HTTP/1.1[0m" 500 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:32:43] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:32:43] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.62:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 217-337-721
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:34:09] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:34:09] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:34:09] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:34:10] "GET /static/css/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:34:10] "[32mGET /login HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:34:10] "[35m[1mGET /dashboard HTTP/1.1[0m" 500 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:34:11] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:34:12] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
