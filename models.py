@@ -25,6 +25,8 @@ class VM(db.Model):
     disk_size = db.Column(db.Integer, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     azure_id = db.Column(db.String(255), unique=True, nullable=False)
+    ip_address = db.Column(db.String(45), nullable=True)
+    os_image = db.Column(db.String(255), nullable=False)
 
 class Payment(db.Model):
     id = db.Column(db.Integer, primary_key=True)

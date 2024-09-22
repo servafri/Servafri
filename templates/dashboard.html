@@ -21,6 +21,8 @@
                             <th>CPU Cores</th>
                             <th>RAM (GB)</th>
                             <th>Disk Size (GB)</th>
+                            <th>IP Address</th>
+                            <th>OS Image</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -31,6 +33,8 @@
                             <td>{{ vm.cpu_cores }}</td>
                             <td>{{ vm.ram }}</td>
                             <td>{{ vm.disk_size }}</td>
+                            <td>{{ vm.ip_address }}</td>
+                            <td>{{ vm.os_image }}</td>
                             <td>{{ vm.status|default('Running', true) }}</td>
                         </tr>
                     {% endfor %}
@@ -94,6 +98,10 @@
                 <div class="form-group">
                     {{ vm_form.disk_size.label }}
                     {{ vm_form.disk_size() }}
+                </div>
+                <div class="form-group">
+                    {{ vm_form.os_image.label }}
+                    {{ vm_form.os_image() }}
                 </div>
                 <div class="form-group">
                     {{ vm_form.submit() }}

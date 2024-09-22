@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, IntegerField, DecimalField
+from wtforms import StringField, PasswordField, SubmitField, IntegerField, DecimalField, SelectField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, NumberRange
 
 class LoginForm(FlaskForm):
@@ -19,6 +19,7 @@ class VMProvisionForm(FlaskForm):
     cpu_cores = IntegerField('CPU Cores', validators=[DataRequired(), NumberRange(min=1, max=32)])
     ram = IntegerField('RAM (GB)', validators=[DataRequired(), NumberRange(min=1, max=128)])
     disk_size = IntegerField('Disk Size (GB)', validators=[DataRequired(), NumberRange(min=10, max=1000)])
+    os_image = SelectField('OS Image', choices=[('ubuntu', 'Ubuntu'), ('windows', 'Windows')], validators=[DataRequired()])
     submit = SubmitField('Provision VM')
 
 class BillingForm(FlaskForm):

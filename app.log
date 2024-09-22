@@ -4047,3 +4047,47 @@ INFO:werkzeug:172.31.196.87 - - [18/Sep/2024 16:54:30] "[33mGET /api/vms HTTP/1
 INFO:werkzeug:172.31.196.87 - - [18/Sep/2024 16:54:59] "[32mGET / HTTP/1.1[0m" 302 -
 INFO:werkzeug:172.31.196.87 - - [18/Sep/2024 16:54:59] "GET /login HTTP/1.1" 200 -
 INFO:werkzeug:172.31.196.87 - - [18/Sep/2024 16:55:00] "GET /static/css/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.62:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 633-370-066
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:13:39] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:13:41] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:13:44] "GET /static/css/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:15:25] "[32mPOST /login HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:15:25] "GET /dashboard HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:15:25] "GET /static/js/dashboard.js HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:15:26] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:15:28] "[33mGET /api/vms HTTP/1.1[0m" 404 -
+INFO:werkzeug: * Detected change in '/home/runner/ServafriCloud/models.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 135-089-318
+INFO:werkzeug: * Detected change in '/home/runner/ServafriCloud/forms.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 185-342-393
+INFO:werkzeug: * Detected change in '/home/runner/ServafriCloud/auth.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 123-096-718
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.62:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 117-455-377
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:20:15] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:20:15] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:20:15] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:20:15] "GET /static/css/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:20:16] "[32mGET /login HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:20:16] "[35m[1mGET /dashboard HTTP/1.1[0m" 500 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:20:18] "GET /dashboard?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.62 - - [22/Sep/2024 10:20:19] "GET /dashboard?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -

@@ -68,14 +68,16 @@ def provision_vm():
     form = VMProvisionForm()
     if form.validate_on_submit():
         try:
-            azure_vm = create_vm(form.name.data, form.cpu_cores.data, form.ram.data, form.disk_size.data)
+            azure_vm = create_vm(form.name.data, form.cpu_cores.data, form.ram.data, form.disk_size.data, form.os_image.data)
             vm = VM(
                 name=azure_vm['name'],
                 cpu_cores=form.cpu_cores.data,
                 ram=form.ram.data,
                 disk_size=form.disk_size.data,
                 user_id=current_user.id,
-                azure_id=azure_vm['id']
+                azure_id=azure_vm['id'],
+                ip_address=azure_vm['ip_address'],
+                os_image=form.os_image.data
             )
             db.session.add(vm)
             db.session.commit()

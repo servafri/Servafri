@@ -90,7 +90,7 @@ agentRequireRestartOnSave = false
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "flask db migrate -m 'Add balance column to User model'"
+args = "flask db migrate -m 'Add IP address and OS image to VM model'"
 
 [[workflows.workflow]]
 name = "Apply Migration"

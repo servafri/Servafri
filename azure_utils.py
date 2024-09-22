@@ -20,7 +20,7 @@ def get_azure_clients():
     resource_client = ResourceManagementClient(credential, SUBSCRIPTION_ID)
     return compute_client, network_client, resource_client
 
-def create_vm(name, cpu_cores, ram, disk_size):
+def create_vm(name, cpu_cores, ram, disk_size, os_image):
     compute_client, network_client, resource_client = get_azure_clients()
 
     # Create a resource group
@@ -62,24 +62,37 @@ def create_vm(name, cpu_cores, ram, disk_size):
         }
     ).result()
 
+    # Define VM parameters based on the selected OS image
+    os_profile = {
+        'computer_name': name,
+        'admin_username': 'azureuser',
+        'admin_password': 'Password123!'  # In production, use a more secure method
+    }
+
+    if 'windows' in os_image.lower():
+        image_reference = {
+            'publisher': 'MicrosoftWindowsServer',
+            'offer': 'WindowsServer',
+            'sku': '2019-Datacenter',
+            'version': 'latest'
+        }
+    else:  # Default to Ubuntu
+        image_reference = {
+            'publisher': 'Canonical',
+            'offer': 'UbuntuServer',
+            'sku': '18.04-LTS',
+            'version': 'latest'
+        }
+
     # Create the virtual machine
     vm_parameters = {
         'location': LOCATION,
-        'os_profile': {
-            'computer_name': name,
-            'admin_username': 'azureuser',
-            'admin_password': 'Password123!'  # In production, use a more secure method
-        },
+        'os_profile': os_profile,
         'hardware_profile': {
-            'vm_size': 'Standard_D2s_v3'  # Updated to Standard_D2s_v3 as requested
+            'vm_size': 'Standard_D2s_v3'
         },
         'storage_profile': {
-            'image_reference': {
-                'publisher': 'Canonical',
-                'offer': 'UbuntuServer',
-                'sku': '18.04-LTS',
-                'version': 'latest'
-            },
+            'image_reference': image_reference,
             'os_disk': {
                 'create_option': 'FromImage',
                 'managed_disk': {'storage_account_type': 'Standard_LRS'},
@@ -95,10 +108,15 @@ def create_vm(name, cpu_cores, ram, disk_size):
         RESOURCE_GROUP, name, vm_parameters
     ).result()
 
+    # Get the public IP address
+    public_ip_address = network_client.public_ip_addresses.get(RESOURCE_GROUP, f'{name}-ip')
+
     return {
         'id': vm.id,
         'name': vm.name,
         'location': vm.location,
         'vm_size': vm.hardware_profile.vm_size,
-        'provisioning_state': vm.provisioning_state
+        'provisioning_state': vm.provisioning_state,
+        'ip_address': public_ip_address.ip_address,
+        'os_image': os_image
     }
