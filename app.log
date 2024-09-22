@@ -4253,3 +4253,8 @@ INFO:werkzeug:172.31.196.19 - - [22/Sep/2024 10:45:33] "[32mGET /login HTTP/1.1
 INFO:werkzeug:172.31.196.19 - - [22/Sep/2024 10:45:33] "[35m[1mGET /dashboard HTTP/1.1[0m" 500 -
 INFO:werkzeug:172.31.196.19 - - [22/Sep/2024 10:45:34] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
 INFO:werkzeug:172.31.196.19 - - [22/Sep/2024 10:45:34] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.19 - - [22/Sep/2024 10:45:39] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.19 - - [22/Sep/2024 10:45:39] "[32mGET /login HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.19 - - [22/Sep/2024 10:45:40] "[35m[1mGET /dashboard HTTP/1.1[0m" 500 -
+INFO:werkzeug:172.31.196.19 - - [22/Sep/2024 10:45:40] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.19 - - [22/Sep/2024 10:45:41] "[36mGET /dashboard?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
