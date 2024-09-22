@@ -2,7 +2,7 @@ from flask_migrate import Migrate
 from extensions import app, db
 from models import User
 from auth import auth as auth_blueprint
-from flask import redirect, url_for
+from flask import redirect, url_for, send_from_directory
 import logging
 
 app.register_blueprint(auth_blueprint)
@@ -14,6 +14,10 @@ migrate = Migrate(app, db)
 @app.route('/')
 def index():
     return redirect(url_for('auth.login'))
+
+@app.route('/')
+def serve_index():
+    return app.send_static_file('index.html')
 
 if __name__ == '__main__':
     with app.app_context():

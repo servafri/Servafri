@@ -64,12 +64,43 @@ header a:hover {
     font-weight: bold;
 }
 
-.form-container {
+.dashboard-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.dashboard-container section {
     background: #ffffff;
     padding: 20px;
-    margin-top: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-container h2 {
+    color: #35424a;
+    border-bottom: 2px solid #e8491d;
+    padding-bottom: 10px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    text-align: left;
+    padding: 8px;
+}
+
+th {
+    background-color: #f2f2f2;
 }
 
 .form-group {
@@ -101,22 +132,11 @@ header a:hover {
     background: #e8491d;
 }
 
-#vm-list {
-    margin-top: 20px;
-}
-
-.vm-item {
-    background: #fff;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
-
 @media(max-width: 768px) {
     header #branding,
     header nav,
-    header nav li {
+    header nav li,
+    .dashboard-container {
         float: none;
         text-align: center;
         width: 100%;

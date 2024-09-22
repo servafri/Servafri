@@ -8,15 +8,34 @@
         <section class="user-info">
             <h2>Your Account</h2>
             <p>Current Balance: ₦{{ "%.2f"|format(current_user.balance or 0) }}</p>
+            <p>Total VMs: {{ vms|length }}</p>
+            <p>Total Kubernetes Deployments: {{ kubernetes_deployments|length }}</p>
         </section>
         <section class="vm-list">
             <h2>Your Provisioned VMs</h2>
             {% if vms %}
-                <ul>
-                {% for vm in vms %}
-                    <li>{{ vm.name }} - CPU: {{ vm.cpu_cores }}, RAM: {{ vm.ram }}GB, Disk: {{ vm.disk_size }}GB</li>
-                {% endfor %}
-                </ul>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>CPU Cores</th>
+                            <th>RAM (GB)</th>
+                            <th>Disk Size (GB)</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for vm in vms %}
+                        <tr>
+                            <td>{{ vm.name }}</td>
+                            <td>{{ vm.cpu_cores }}</td>
+                            <td>{{ vm.ram }}</td>
+                            <td>{{ vm.disk_size }}</td>
+                            <td>{{ vm.status|default('Running', true) }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             {% else %}
                 <p>You haven't provisioned any VMs yet.</p>
             {% endif %}
@@ -24,16 +43,34 @@
         <section class="kubernetes-list">
             <h2>Your Kubernetes Deployments</h2>
             {% if kubernetes_deployments %}
-                <ul>
-                {% for deployment in kubernetes_deployments %}
-                    <li>
-                        {{ deployment.name }} - Image: {{ deployment.image }}, Replicas: {{ deployment.replicas }}, Status: {{ deployment.status }}
-                        <form action="{{ url_for('auth.delete_kubernetes_deployment', deployment_id=deployment.id) }}" method="POST" style="display: inline;">
-                            <input type="submit" value="Delete" onclick="return confirm('Are you sure you want to delete this deployment?');">
-                        </form>
-                    </li>
-                {% endfor %}
-                </ul>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Image</th>
+                            <th>Replicas</th>
+                            <th>Status</th>
+                            <th>Created At</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for deployment in kubernetes_deployments %}
+                        <tr>
+                            <td>{{ deployment.name }}</td>
+                            <td>{{ deployment.image }}</td>
+                            <td>{{ deployment.replicas }}</td>
+                            <td>{{ deployment.status }}</td>
+                            <td>{{ deployment.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                            <td>
+                                <form action="{{ url_for('auth.delete_kubernetes_deployment', deployment_id=deployment.id) }}" method="POST" style="display: inline;">
+                                    <input type="submit" value="Delete" onclick="return confirm('Are you sure you want to delete this deployment?');">
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
             {% else %}
                 <p>You haven't created any Kubernetes deployments yet.</p>
             {% endif %}
