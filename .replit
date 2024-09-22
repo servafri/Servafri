@@ -102,7 +102,7 @@ agentRequireRestartOnSave = false
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "export FLASK_APP=main.py && flask db migrate -m 'Add ip_address and os_image to VM model'"
+args = "export FLASK_APP=main.py && flask db migrate -m 'Add ip_address to VM model'"
 
 [[workflows.workflow]]
 name = "Apply Migration"
