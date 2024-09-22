@@ -90,7 +90,7 @@ agentRequireRestartOnSave = false
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "flask db migrate -m 'Add IP address and OS image to VM model'"
+args = "export FLASK_APP=main.py && flask db migrate -m 'Add IP address and OS image to VM model'"
 
 [[workflows.workflow]]
 name = "Apply Migration"
@@ -101,7 +101,7 @@ agentRequireRestartOnSave = false
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "flask db upgrade"
+args = "export FLASK_APP=main.py && flask db upgrade"
 
 [deployment]
 run = ["sh", "-c", "python main.py"]
