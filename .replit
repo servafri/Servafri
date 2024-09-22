@@ -35,6 +35,18 @@ args = "Create Migration"
 task = "workflow.run"
 args = "Apply Migration"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Apply Pending Migrations"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Create New Migration"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Apply New Migration"
+
 [[workflows.workflow]]
 name = "Run Flask App"
 author = "agent"
@@ -94,6 +106,39 @@ args = "export FLASK_APP=main.py && flask db migrate -m 'Add ip_address and os_i
 
 [[workflows.workflow]]
 name = "Apply Migration"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "export FLASK_APP=main.py && flask db upgrade"
+
+[[workflows.workflow]]
+name = "Apply Pending Migrations"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "export FLASK_APP=main.py && flask db upgrade"
+
+[[workflows.workflow]]
+name = "Create New Migration"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "export FLASK_APP=main.py && flask db migrate -m 'Add default value for User balance'"
+
+[[workflows.workflow]]
+name = "Apply New Migration"
 author = "agent"
 
 [workflows.workflow.metadata]
