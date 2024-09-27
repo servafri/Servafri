@@ -16,13 +16,17 @@ parsed_uri = urllib.parse.urlparse(mongo_uri)
 username = urllib.parse.quote_plus(parsed_uri.username) if parsed_uri.username else ''
 password = urllib.parse.quote_plus(parsed_uri.password) if parsed_uri.password else ''
 host = parsed_uri.hostname
-port = parsed_uri.port
+port = parsed_uri.port if parsed_uri.port else 27017  # Use default port 27017 if not specified
 database = parsed_uri.path.lstrip('/')
 
 print(f"Debug: Parsed MongoDB URI - Host: {host}, Port: {port}, Database: {database}")
 
 # Reconstruct the MongoDB URI with escaped components
-escaped_mongo_uri = f"mongodb://{username}:{password}@{host}:{port}/{database}"
+if username and password:
+    escaped_mongo_uri = f"mongodb://{username}:{password}@{host}:{port}/{database}"
+else:
+    escaped_mongo_uri = f"mongodb://{host}:{port}/{database}"
+
 app.config['MONGO_URI'] = escaped_mongo_uri
 
 print(f"Debug: Escaped MONGO_URI: {escaped_mongo_uri}")
