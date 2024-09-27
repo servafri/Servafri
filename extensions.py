@@ -7,6 +7,9 @@ import urllib.parse
 app = Flask(__name__)
 app.config.from_object(Config)
 
+print("Debug: Initializing extensions.py")
+print(f"Debug: MONGO_URI from config: {app.config['MONGO_URI']}")
+
 # Parse and escape MongoDB URI components
 mongo_uri = app.config['MONGO_URI']
 parsed_uri = urllib.parse.urlparse(mongo_uri)
@@ -16,9 +19,13 @@ host = parsed_uri.hostname
 port = parsed_uri.port
 database = parsed_uri.path.lstrip('/')
 
+print(f"Debug: Parsed MongoDB URI - Host: {host}, Port: {port}, Database: {database}")
+
 # Reconstruct the MongoDB URI with escaped components
 escaped_mongo_uri = f"mongodb://{username}:{password}@{host}:{port}/{database}"
 app.config['MONGO_URI'] = escaped_mongo_uri
+
+print(f"Debug: Escaped MONGO_URI: {escaped_mongo_uri}")
 
 mongo = PyMongo(app)
 login_manager = LoginManager(app)
@@ -28,3 +35,5 @@ login_manager.login_view = 'auth.login'
 def load_user(user_id):
     from models import User
     return User.get_user_by_id(user_id)
+
+print("Debug: Finished initializing extensions.py")
