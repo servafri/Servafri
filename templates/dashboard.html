@@ -9,7 +9,6 @@
             <h2>Your Account</h2>
             <p>Current Balance: ₦{{ "%.2f"|format(current_user.balance or 0) }}</p>
             <p>Total VMs: {{ vms|length }}</p>
-            <p>Total Kubernetes Deployments: {{ kubernetes_deployments|length }}</p>
         </section>
         <section class="vm-list">
             <h2>Your Provisioned VMs</h2>
@@ -44,41 +43,6 @@
                 <p>You haven't provisioned any VMs yet.</p>
             {% endif %}
         </section>
-        <section class="kubernetes-list">
-            <h2>Your Kubernetes Deployments</h2>
-            {% if kubernetes_deployments %}
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Image</th>
-                            <th>Replicas</th>
-                            <th>Status</th>
-                            <th>Created At</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for deployment in kubernetes_deployments %}
-                        <tr>
-                            <td>{{ deployment.name }}</td>
-                            <td>{{ deployment.image }}</td>
-                            <td>{{ deployment.replicas }}</td>
-                            <td>{{ deployment.status }}</td>
-                            <td>{{ deployment.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</td>
-                            <td>
-                                <form action="{{ url_for('auth.delete_kubernetes_deployment', deployment_id=deployment.id) }}" method="POST" style="display: inline;">
-                                    <input type="submit" value="Delete" onclick="return confirm('Are you sure you want to delete this deployment?');">
-                                </form>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <p>You haven't created any Kubernetes deployments yet.</p>
-            {% endif %}
-        </section>
         <section class="provision-form">
             <h2>Provision a New VM</h2>
             <form method="POST" action="{{ url_for('auth.provision_vm') }}">
@@ -105,27 +69,6 @@
                 </div>
                 <div class="form-group">
                     {{ vm_form.submit() }}
-                </div>
-            </form>
-        </section>
-        <section class="kubernetes-form">
-            <h2>Create a Kubernetes Deployment</h2>
-            <form method="POST" action="{{ url_for('auth.create_kubernetes_deployment') }}">
-                {{ kubernetes_form.hidden_tag() }}
-                <div class="form-group">
-                    {{ kubernetes_form.name.label }}
-                    {{ kubernetes_form.name() }}
-                </div>
-                <div class="form-group">
-                    {{ kubernetes_form.image.label }}
-                    {{ kubernetes_form.image() }}
-                </div>
-                <div class="form-group">
-                    {{ kubernetes_form.replicas.label }}
-                    {{ kubernetes_form.replicas() }}
-                </div>
-                <div class="form-group">
-                    {{ kubernetes_form.submit() }}
                 </div>
             </form>
         </section>

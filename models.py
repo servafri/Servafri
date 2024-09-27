@@ -1,15 +1,15 @@
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-from extensions import db
+from bson import ObjectId
+from extensions import mongo
 
-class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(64), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(255))
-    vms = db.relationship('VM', backref='owner', lazy='dynamic')
-    balance = db.Column(db.Float, default=0.0, nullable=False)
-    kubernetes_deployments = db.relationship('KubernetesDeployment', backref='owner', lazy='dynamic')
+class User(UserMixin):
+    def __init__(self, username, email, password_hash, balance=0.0, _id=None):
+        self.username = username
+        self.email = email
+        self.password_hash = password_hash
+        self.balance = balance
+        self._id = _id if _id else ObjectId()
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -17,30 +17,49 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-class VM(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), nullable=False)
-    cpu_cores = db.Column(db.Integer, nullable=False)
-    ram = db.Column(db.Integer, nullable=False)
-    disk_size = db.Column(db.Integer, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    azure_id = db.Column(db.String(255), unique=True, nullable=False)
-    ip_address = db.Column(db.String(45), nullable=True)
-    os_image = db.Column(db.String(255), nullable=False, default='ubuntu')
+    @classmethod
+    def get_user_by_id(cls, user_id):
+        user_data = mongo.db.users.find_one({"_id": ObjectId(user_id)})
+        return cls(**user_data) if user_data else None
 
-class Payment(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    amount = db.Column(db.Float, nullable=False)
-    reference = db.Column(db.String(255), unique=True, nullable=False)
-    status = db.Column(db.String(20), nullable=False)
-    created_at = db.Column(db.DateTime, nullable=False)
+    @classmethod
+    def get_user_by_username(cls, username):
+        user_data = mongo.db.users.find_one({"username": username})
+        return cls(**user_data) if user_data else None
 
-class KubernetesDeployment(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), nullable=False)
-    image = db.Column(db.String(255), nullable=False)
-    replicas = db.Column(db.Integer, default=1, nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    created_at = db.Column(db.DateTime, nullable=False)
-    status = db.Column(db.String(20), nullable=False)
+    def save(self):
+        mongo.db.users.update_one({"_id": self._id}, {"$set": self.__dict__}, upsert=True)
+
+    def get_id(self):
+        return str(self._id)
+
+class VM:
+    def __init__(self, name, cpu_cores, ram, disk_size, user_id, azure_id, ip_address=None, os_image='ubuntu', _id=None):
+        self.name = name
+        self.cpu_cores = cpu_cores
+        self.ram = ram
+        self.disk_size = disk_size
+        self.user_id = user_id
+        self.azure_id = azure_id
+        self.ip_address = ip_address
+        self.os_image = os_image
+        self._id = _id if _id else ObjectId()
+
+    @classmethod
+    def get_vms_by_user_id(cls, user_id):
+        return [cls(**vm_data) for vm_data in mongo.db.vms.find({"user_id": user_id})]
+
+    def save(self):
+        mongo.db.vms.update_one({"_id": self._id}, {"$set": self.__dict__}, upsert=True)
+
+class Payment:
+    def __init__(self, user_id, amount, reference, status, created_at, _id=None):
+        self.user_id = user_id
+        self.amount = amount
+        self.reference = reference
+        self.status = status
+        self.created_at = created_at
+        self._id = _id if _id else ObjectId()
+
+    def save(self):
+        mongo.db.payments.update_one({"_id": self._id}, {"$set": self.__dict__}, upsert=True)

@@ -1,11 +1,10 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_user, logout_user, login_required, current_user
 from urllib.parse import urlparse
-from models import User, VM, Payment, KubernetesDeployment
-from forms import LoginForm, SignupForm, VMProvisionForm, BillingForm, KubernetesDeploymentForm
-from extensions import db
+from models import User, VM, Payment
+from forms import LoginForm, SignupForm, VMProvisionForm, BillingForm
+from extensions import mongo
 from azure_utils import create_vm
-from kubernetes_utils import create_deployment, list_deployments, delete_deployment
 from paystackapi.paystack import Paystack
 from datetime import datetime
 import requests
@@ -20,7 +19,7 @@ def login():
         return redirect(url_for('auth.dashboard'))
     form = LoginForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        user = User.get_user_by_username(form.username.data)
         if user is None or not user.check_password(form.password.data):
             flash('Invalid username or password')
             return redirect(url_for('auth.login'))
@@ -37,10 +36,9 @@ def signup():
         return redirect(url_for('auth.dashboard'))
     form = SignupForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
+        user = User(username=form.username.data, email=form.email.data, password_hash='')
         user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
+        user.save()
         flash('Your account has been created! You can now log in.', 'success')
         return redirect(url_for('auth.login'))
     return render_template('signup.html', form=form)
@@ -54,13 +52,10 @@ def logout():
 @auth.route('/dashboard', methods=['GET'])
 @login_required
 def dashboard():
-    vms = VM.query.filter_by(user_id=current_user.id).all()
-    kubernetes_deployments = KubernetesDeployment.query.filter_by(user_id=current_user.id).all()
+    vms = VM.get_vms_by_user_id(current_user.get_id())
     vm_form = VMProvisionForm()
     billing_form = BillingForm()
-    kubernetes_form = KubernetesDeploymentForm()
-    return render_template('dashboard.html', vms=vms, kubernetes_deployments=kubernetes_deployments,
-                           vm_form=vm_form, billing_form=billing_form, kubernetes_form=kubernetes_form)
+    return render_template('dashboard.html', vms=vms, vm_form=vm_form, billing_form=billing_form)
 
 @auth.route('/provision_vm', methods=['POST'])
 @login_required
@@ -74,64 +69,17 @@ def provision_vm():
                 cpu_cores=form.cpu_cores.data,
                 ram=form.ram.data,
                 disk_size=form.disk_size.data,
-                user_id=current_user.id,
+                user_id=current_user.get_id(),
                 azure_id=azure_vm['id'],
                 ip_address=azure_vm['ip_address'],
                 os_image=form.os_image.data
             )
-            db.session.add(vm)
-            db.session.commit()
+            vm.save()
             flash('VM provisioned successfully!', 'success')
         except Exception as e:
             flash(f'Error provisioning VM: {str(e)}', 'error')
     else:
         flash('Error provisioning VM. Please check your input.', 'error')
-    return redirect(url_for('auth.dashboard'))
-
-@auth.route('/create_kubernetes_deployment', methods=['POST'])
-@login_required
-def create_kubernetes_deployment():
-    form = KubernetesDeploymentForm()
-    if form.validate_on_submit():
-        try:
-            success, message = create_deployment(form.name.data, form.image.data, form.replicas.data)
-            if success:
-                deployment = KubernetesDeployment(
-                    name=form.name.data,
-                    image=form.image.data,
-                    replicas=form.replicas.data,
-                    user_id=current_user.id,
-                    created_at=datetime.utcnow(),
-                    status='Created'
-                )
-                db.session.add(deployment)
-                db.session.commit()
-                flash('Kubernetes deployment created successfully!', 'success')
-            else:
-                flash(f'Error creating Kubernetes deployment: {message}', 'error')
-        except Exception as e:
-            flash(f'Error creating Kubernetes deployment: {str(e)}', 'error')
-    else:
-        flash('Error creating Kubernetes deployment. Please check your input.', 'error')
-    return redirect(url_for('auth.dashboard'))
-
-@auth.route('/delete_kubernetes_deployment/<int:deployment_id>', methods=['POST'])
-@login_required
-def delete_kubernetes_deployment(deployment_id):
-    deployment = KubernetesDeployment.query.filter_by(id=deployment_id, user_id=current_user.id).first()
-    if deployment:
-        try:
-            success, message = delete_deployment(deployment.name)
-            if success:
-                db.session.delete(deployment)
-                db.session.commit()
-                flash('Kubernetes deployment deleted successfully!', 'success')
-            else:
-                flash(f'Error deleting Kubernetes deployment: {message}', 'error')
-        except Exception as e:
-            flash(f'Error deleting Kubernetes deployment: {str(e)}', 'error')
-    else:
-        flash('Kubernetes deployment not found', 'error')
     return redirect(url_for('auth.dashboard'))
 
 @auth.route('/payment', methods=['POST'])
@@ -148,14 +96,13 @@ def payment():
             )
             if response['status']:
                 payment = Payment(
-                    user_id=current_user.id,
+                    user_id=current_user.get_id(),
                     amount=form.amount.data,
                     reference=response['data']['reference'],
                     status='pending',
                     created_at=datetime.utcnow()
                 )
-                db.session.add(payment)
-                db.session.commit()
+                payment.save()
                 return redirect(response['data']['authorization_url'])
             else:
                 flash('Error initializing payment. Please try again.', 'error')
@@ -180,12 +127,12 @@ def verify_payment():
             paystack = Paystack(secret_key=current_app.config['PAYSTACK_SECRET_KEY'])
             response = paystack.transaction.verify(reference)
             if response['status']:
-                payment = Payment.query.filter_by(reference=reference).first()
+                payment = mongo.db.payments.find_one({"reference": reference})
                 if payment:
-                    payment.status = 'success'
-                    db.session.commit()
-                    current_user.balance += payment.amount
-                    db.session.commit()
+                    mongo.db.payments.update_one({"_id": payment['_id']}, {"$set": {"status": "success"}})
+                    user = User.get_user_by_id(current_user.get_id())
+                    user.balance += payment['amount']
+                    user.save()
                     flash('Payment successful! Your balance has been updated.', 'success')
                 else:
                     flash('Payment verification failed. Please contact support.', 'error')
@@ -218,13 +165,13 @@ def paystack_webhook():
     event = request.json
     if event and event['event'] == 'charge.success':
         reference = event['data']['reference']
-        payment = Payment.query.filter_by(reference=reference).first()
+        payment = mongo.db.payments.find_one({"reference": reference})
         if payment:
-            payment.status = 'success'
-            user = User.query.get(payment.user_id)
+            mongo.db.payments.update_one({"_id": payment['_id']}, {"$set": {"status": "success"}})
+            user = User.get_user_by_id(payment['user_id'])
             if user:
-                user.balance += payment.amount
-                db.session.commit()
+                user.balance += payment['amount']
+                user.save()
                 return 'Webhook processed', 200
             else:
                 return 'User not found', 404
