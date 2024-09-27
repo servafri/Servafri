@@ -9,6 +9,7 @@ class Config:
     @staticmethod
     def print_mongo_uri_info():
         mongo_uri = os.environ.get('MONGO_URI', 'mongodb://localhost:27017/servafri')
+        print(f"Raw MONGO_URI: {mongo_uri}")
         parsed_uri = urlparse(mongo_uri)
         print(f"MongoDB URI scheme: {parsed_uri.scheme}")
         print(f"MongoDB URI hostname: {parsed_uri.hostname}")
