@@ -28,16 +28,17 @@ except Exception as e:
     print(f"Debug: Error connecting to MongoDB: {str(e)}")
     print("Debug: Please check your MONGO_URI configuration and ensure the MongoDB Atlas cluster is accessible.")
 
-# Only set up LoginManager if mongo connection is successful
-if mongo:
-    login_manager = LoginManager(app)
-    login_manager.login_view = 'auth.login'
+# Initialize LoginManager regardless of MongoDB connection status
+login_manager = LoginManager(app)
+login_manager.login_view = 'auth.login'
 
-    @login_manager.user_loader
-    def load_user(user_id):
+@login_manager.user_loader
+def load_user(user_id):
+    try:
         from models import User
         return User.get_user_by_id(user_id)
-else:
-    print("Debug: LoginManager not initialized due to MongoDB connection failure")
+    except Exception as e:
+        print(f"Debug: Error loading user: {str(e)}")
+        return None
 
 print("Debug: Finished initializing extensions.py")

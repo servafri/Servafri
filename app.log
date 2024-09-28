@@ -4307,3 +4307,19 @@ INFO:werkzeug:[33mPress CTRL+C to quit[0m
 INFO:werkzeug: * Restarting with stat
 WARNING:werkzeug: * Debugger is active!
 INFO:werkzeug: * Debugger PIN: 117-620-662
+INFO:werkzeug:172.31.196.32 - - [28/Sep/2024 23:13:15] "[35m[1mGET /login HTTP/1.1[0m" 500 -
+INFO:werkzeug:172.31.196.32 - - [28/Sep/2024 23:13:17] "GET /login?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.32 - - [28/Sep/2024 23:13:17] "GET /login?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.32 - - [28/Sep/2024 23:14:18] "[35m[1mGET /signup HTTP/1.1[0m" 500 -
+INFO:werkzeug:172.31.196.32 - - [28/Sep/2024 23:14:18] "[36mGET /signup?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.32 - - [28/Sep/2024 23:14:19] "[36mGET /signup?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in '/home/runner/ServafriCloud/extensions.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.32:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 834-035-920

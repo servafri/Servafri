@@ -1,0 +1,42 @@
+AttributeError
+AttributeError: 'Flask' object has no attribute 'login_manager'
+
+Traceback (most recent call last)
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 1498, in __call__
+return self.wsgi_app(environ, start_response)
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 1476, in wsgi_app
+response = self.handle_exception(e)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 1473, in wsgi_app
+response = self.full_dispatch_request()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 882, in full_dispatch_request
+rv = self.handle_user_exception(e)
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 880, in full_dispatch_request
+rv = self.dispatch_request()
+     ^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 865, in dispatch_request
+return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/auth.py", line 35, in signup
+if current_user.is_authenticated:
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/werkzeug/local.py", line 318, in __get__
+obj = instance._get_current_object()
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/werkzeug/local.py", line 526, in _get_current_object
+return get_name(local())
+                ^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/flask_login/utils.py", line 25, in <lambda>
+current_user = LocalProxy(lambda: _get_user())
+                                  ^^^^^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/flask_login/utils.py", line 370, in _get_user
+current_app.login_manager._load_user()
+^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'Flask' object has no attribute 'login_manager'
+The debugger caught an exception in your WSGI application. You can now look at the traceback which led to the error.
+To switch between the interactive traceback and the plaintext one, you can click on the "Traceback" headline. From the text traceback you can also create a paste of it.
+
+Brought to you by DON'T PANIC, your friendly Werkzeug powered traceback interpreter.
