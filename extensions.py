@@ -8,36 +8,36 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 print("Debug: Initializing extensions.py")
-print(f"Debug: MONGO_URI from config: {app.config['MONGO_URI']}")
+mongo_uri = Config.get_mongo_uri()
+print(f"Debug: Formatted MONGO_URI: {mongo_uri}")
 
-# Parse and escape MongoDB URI components
-mongo_uri = app.config['MONGO_URI']
-parsed_uri = urllib.parse.urlparse(mongo_uri)
-username = urllib.parse.quote_plus(parsed_uri.username) if parsed_uri.username else ''
-password = urllib.parse.quote_plus(parsed_uri.password) if parsed_uri.password else ''
-host = parsed_uri.hostname
-port = parsed_uri.port if parsed_uri.port else 27017  # Use default port 27017 if not specified
-database = parsed_uri.path.lstrip('/')
+app.config['MONGO_URI'] = mongo_uri
 
-print(f"Debug: Parsed MongoDB URI - Host: {host}, Port: {port}, Database: {database}")
+# Initialize PyMongo with None
+mongo = None
 
-# Reconstruct the MongoDB URI with escaped components
-if username and password:
-    escaped_mongo_uri = f"mongodb://{username}:{password}@{host}:{port}/{database}"
+try:
+    # Attempt to create PyMongo instance
+    mongo = PyMongo(app)
+    
+    # Test the connection
+    mongo.db.command('ping')
+    print("Debug: MongoDB connection established successfully")
+    print("Debug: MongoDB ping successful")
+except Exception as e:
+    print(f"Debug: Error connecting to MongoDB: {str(e)}")
+    print("Debug: Please check your MONGO_URI configuration and ensure the MongoDB Atlas cluster is accessible.")
+
+# Only set up LoginManager if mongo connection is successful
+if mongo:
+    login_manager = LoginManager(app)
+    login_manager.login_view = 'auth.login'
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        from models import User
+        return User.get_user_by_id(user_id)
 else:
-    escaped_mongo_uri = f"mongodb://{host}:{port}/{database}"
-
-app.config['MONGO_URI'] = escaped_mongo_uri
-
-print(f"Debug: Escaped MONGO_URI: {escaped_mongo_uri}")
-
-mongo = PyMongo(app)
-login_manager = LoginManager(app)
-login_manager.login_view = 'auth.login'
-
-@login_manager.user_loader
-def load_user(user_id):
-    from models import User
-    return User.get_user_by_id(user_id)
+    print("Debug: LoginManager not initialized due to MongoDB connection failure")
 
 print("Debug: Finished initializing extensions.py")
