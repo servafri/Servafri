@@ -3,7 +3,6 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_pymongo import PyMongo
 from config import Config
-import urllib.parse
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -11,18 +10,12 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 logging.debug("Initializing extensions.py")
-mongo_uri = Config.get_mongo_uri()
-logging.debug(f"Formatted MONGO_URI: {mongo_uri}")
+logging.debug(f"MONGO_URI: {app.config['MONGO_URI']}")
 
-app.config['MONGO_URI'] = mongo_uri
-
-# Initialize PyMongo with None
-mongo = None
+# Initialize PyMongo
+mongo = PyMongo(app)
 
 try:
-    # Attempt to create PyMongo instance
-    mongo = PyMongo(app)
-    
     # Test the connection
     mongo.db.command('ping')
     logging.info("MongoDB connection established successfully")
@@ -31,7 +24,7 @@ except Exception as e:
     logging.error(f"MONGO_URI: {app.config['MONGO_URI']}")
     mongo = None
 
-# Initialize LoginManager regardless of MongoDB connection status
+# Initialize LoginManager
 login_manager = LoginManager(app)
 login_manager.login_view = 'auth.login'
 
