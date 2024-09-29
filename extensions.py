@@ -1,15 +1,18 @@
+import logging
 from flask import Flask
 from flask_login import LoginManager
 from flask_pymongo import PyMongo
 from config import Config
 import urllib.parse
 
+logging.basicConfig(level=logging.DEBUG)
+
 app = Flask(__name__)
 app.config.from_object(Config)
 
-print("Debug: Initializing extensions.py")
+logging.debug("Initializing extensions.py")
 mongo_uri = Config.get_mongo_uri()
-print(f"Debug: Formatted MONGO_URI: {mongo_uri}")
+logging.debug(f"Formatted MONGO_URI: {mongo_uri}")
 
 app.config['MONGO_URI'] = mongo_uri
 
@@ -22,11 +25,11 @@ try:
     
     # Test the connection
     mongo.db.command('ping')
-    print("Debug: MongoDB connection established successfully")
-    print("Debug: MongoDB ping successful")
+    logging.info("MongoDB connection established successfully")
 except Exception as e:
-    print(f"Debug: Error connecting to MongoDB: {str(e)}")
-    print("Debug: Please check your MONGO_URI configuration and ensure the MongoDB Atlas cluster is accessible.")
+    logging.error(f"Error connecting to MongoDB: {str(e)}")
+    logging.error(f"MONGO_URI: {app.config['MONGO_URI']}")
+    mongo = None
 
 # Initialize LoginManager regardless of MongoDB connection status
 login_manager = LoginManager(app)
@@ -38,7 +41,7 @@ def load_user(user_id):
         from models import User
         return User.get_user_by_id(user_id)
     except Exception as e:
-        print(f"Debug: Error loading user: {str(e)}")
+        logging.error(f"Error loading user: {str(e)}")
         return None
 
-print("Debug: Finished initializing extensions.py")
+logging.debug("Finished initializing extensions.py")

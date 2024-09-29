@@ -1,0 +1,31 @@
+AttributeError
+AttributeError: 'NoneType' object has no attribute 'db'
+
+Traceback (most recent call last)
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 1498, in __call__
+return self.wsgi_app(environ, start_response)
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 1476, in wsgi_app
+response = self.handle_exception(e)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 1473, in wsgi_app
+response = self.full_dispatch_request()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 882, in full_dispatch_request
+rv = self.handle_user_exception(e)
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 880, in full_dispatch_request
+rv = self.dispatch_request()
+     ^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/.pythonlibs/lib/python3.11/site-packages/flask/app.py", line 865, in dispatch_request
+return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/auth.py", line 22, in login
+user = User.get_user_by_username(form.username.data)
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/ServafriCloud/models.py", line 27, in get_user_by_username
+user_data = mongo.db.users.find_one({"username": username})
+            ^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'db'
+The debugger caught an exception in your WSGI application. You can now look at the traceback which led to the error.
+To switch between the interactive traceback and the plaintext one, you can click on the "Traceback" headline. From the text traceback you can also create a paste of it.

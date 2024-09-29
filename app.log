@@ -4323,3 +4323,41 @@ INFO:werkzeug:[33mPress CTRL+C to quit[0m
 INFO:werkzeug: * Restarting with stat
 WARNING:werkzeug: * Debugger is active!
 INFO:werkzeug: * Debugger PIN: 834-035-920
+INFO:werkzeug:172.31.196.32 - - [28/Sep/2024 23:15:21] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.32 - - [28/Sep/2024 23:15:23] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.32 - - [28/Sep/2024 23:16:00] "GET /signup HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.32 - - [28/Sep/2024 23:16:03] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.32 - - [28/Sep/2024 23:16:25] "POST /signup HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.32 - - [28/Sep/2024 23:16:26] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.32 - - [28/Sep/2024 23:16:40] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.32 - - [28/Sep/2024 23:16:41] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.32 - - [28/Sep/2024 23:16:48] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+INFO:werkzeug:172.31.196.32 - - [28/Sep/2024 23:16:48] "[36mGET /login?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.32 - - [28/Sep/2024 23:16:49] "[36mGET /login?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.7:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 121-622-916
+INFO:werkzeug:172.31.196.7 - - [29/Sep/2024 21:13:01] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.7 - - [29/Sep/2024 21:13:07] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.7 - - [29/Sep/2024 21:13:07] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.7 - - [29/Sep/2024 21:13:08] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.7 - - [29/Sep/2024 21:13:08] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.7 - - [29/Sep/2024 21:13:21] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.7 - - [29/Sep/2024 21:13:21] "GET /static/css/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.7 - - [29/Sep/2024 21:13:42] "GET /static/css/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.7 - - [29/Sep/2024 21:13:43] "[32mGET / HTTP/1.1[0m" 302 -
+INFO:werkzeug:172.31.196.7 - - [29/Sep/2024 21:13:44] "GET /login HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.7 - - [29/Sep/2024 21:13:45] "GET /static/css/styles.css HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.7 - - [29/Sep/2024 21:13:46] "[36mGET /static/css/styles.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:172.31.196.7 - - [29/Sep/2024 21:13:48] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+INFO:werkzeug:172.31.196.7 - - [29/Sep/2024 21:13:55] "[35m[1mPOST /login HTTP/1.1[0m" 500 -
+INFO:werkzeug:172.31.196.7 - - [29/Sep/2024 21:13:55] "GET /login?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.7 - - [29/Sep/2024 21:13:55] "GET /login?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:172.31.196.7 - - [29/Sep/2024 21:13:56] "GET /login?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in '/home/runner/ServafriCloud/extensions.py', reloading
+INFO:werkzeug: * Restarting with stat
