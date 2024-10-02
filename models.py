@@ -1,3 +1,4 @@
+import logging
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from bson import ObjectId
@@ -27,11 +28,15 @@ class User(UserMixin):
             'password_hash': self.password_hash,
             'balance': self.balance
         }
-        if self._id:
-            mongo.db.users.update_one({'_id': self._id}, {'$set': user_data})
-        else:
-            result = mongo.db.users.insert_one(user_data)
-            self._id = result.inserted_id
+        try:
+            if self._id:
+                result = mongo.db.users.update_one({'_id': self._id}, {'$set': user_data})
+            else:
+                result = mongo.db.users.insert_one(user_data)
+                self._id = result.inserted_id
+            logging.debug(f"User saved successfully: {self.username}")
+        except Exception as e:
+            logging.error(f"Error saving user: {str(e)}")
 
     @classmethod
     def from_dict(cls, data):
@@ -72,11 +77,15 @@ class VM:
             'ip_address': self.ip_address,
             'os_image': self.os_image
         }
-        if self._id:
-            mongo.db.vms.update_one({'_id': self._id}, {'$set': vm_data})
-        else:
-            result = mongo.db.vms.insert_one(vm_data)
-            self._id = result.inserted_id
+        try:
+            if self._id:
+                result = mongo.db.vms.update_one({'_id': self._id}, {'$set': vm_data})
+            else:
+                result = mongo.db.vms.insert_one(vm_data)
+                self._id = result.inserted_id
+            logging.debug(f"VM saved successfully: {self.name}")
+        except Exception as e:
+            logging.error(f"Error saving VM: {str(e)}")
 
     @classmethod
     def from_dict(cls, data):
@@ -114,11 +123,15 @@ class Payment:
             'status': self.status,
             'created_at': self.created_at
         }
-        if self._id:
-            mongo.db.payments.update_one({'_id': self._id}, {'$set': payment_data})
-        else:
-            result = mongo.db.payments.insert_one(payment_data)
-            self._id = result.inserted_id
+        try:
+            if self._id:
+                result = mongo.db.payments.update_one({'_id': self._id}, {'$set': payment_data})
+            else:
+                result = mongo.db.payments.insert_one(payment_data)
+                self._id = result.inserted_id
+            logging.debug(f"Payment saved successfully: {self.reference}")
+        except Exception as e:
+            logging.error(f"Error saving payment: {str(e)}")
 
     @classmethod
     def from_dict(cls, data):
@@ -150,11 +163,15 @@ class KubernetesDeployment:
             'created_at': self.created_at,
             'status': self.status
         }
-        if self._id:
-            mongo.db.kubernetes_deployments.update_one({'_id': self._id}, {'$set': deployment_data})
-        else:
-            result = mongo.db.kubernetes_deployments.insert_one(deployment_data)
-            self._id = result.inserted_id
+        try:
+            if self._id:
+                result = mongo.db.kubernetes_deployments.update_one({'_id': self._id}, {'$set': deployment_data})
+            else:
+                result = mongo.db.kubernetes_deployments.insert_one(deployment_data)
+                self._id = result.inserted_id
+            logging.debug(f"Kubernetes deployment saved successfully: {self.name}")
+        except Exception as e:
+            logging.error(f"Error saving Kubernetes deployment: {str(e)}")
 
     @classmethod
     def from_dict(cls, data):

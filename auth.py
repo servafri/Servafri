@@ -1,3 +1,4 @@
+import logging
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_user, logout_user, login_required, current_user
 from urllib.parse import urlparse
@@ -13,23 +14,6 @@ import hashlib
 
 auth = Blueprint('auth', __name__)
 
-@auth.route('/login', methods=['GET', 'POST'])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('auth.dashboard'))
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.get_user_by_username(form.username.data)
-        if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
-            return redirect(url_for('auth.login'))
-        login_user(user)
-        next_page = request.args.get('next')
-        if not next_page or urlparse(next_page).netloc != '':
-            next_page = url_for('auth.dashboard')
-        return redirect(next_page)
-    return render_template('login.html', title='Sign In', form=form)
-
 @auth.route('/signup', methods=['GET', 'POST'])
 def signup():
     if current_user.is_authenticated:
@@ -38,10 +22,35 @@ def signup():
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data, password_hash='')
         user.set_password(form.password.data)
-        user.save()
-        flash('Your account has been created! You can now log in.', 'success')
-        return redirect(url_for('auth.login'))
+        try:
+            user.save()
+            logging.debug(f"User registered successfully: {user.username}")
+            flash('Your account has been created! You can now log in.', 'success')
+            return redirect(url_for('auth.login'))
+        except Exception as e:
+            logging.error(f"Error registering user: {str(e)}")
+            flash('An error occurred while registering. Please try again.', 'error')
     return render_template('signup.html', form=form)
+
+@auth.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('auth.dashboard'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.get_user_by_username(form.username.data)
+        logging.debug(f"Login attempt for user: {form.username.data}")
+        if user is None or not user.check_password(form.password.data):
+            logging.debug(f"Invalid login attempt for user: {form.username.data}")
+            flash('Invalid username or password')
+            return redirect(url_for('auth.login'))
+        login_user(user)
+        logging.debug(f"User logged in successfully: {user.username}")
+        next_page = request.args.get('next')
+        if not next_page or urlparse(next_page).netloc != '':
+            next_page = url_for('auth.dashboard')
+        return redirect(next_page)
+    return render_template('login.html', title='Sign In', form=form)
 
 @auth.route('/logout')
 @login_required
