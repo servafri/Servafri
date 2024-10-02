@@ -2,5 +2,5 @@ import os
 
 class Config:
     SECRET_KEY = os.urandom(32)
-    MONGO_URI = 'mongodb+srv://mayowa:semmat@cluster0.mongodb.net/first?retryWrites=true&w=majority&connectTimeoutMS=30000'
+    MONGO_URI = 'mongodb+srv://mayowa:semmat@cluster0.mongodb.net/first?retryWrites=true&w=majority'
     PAYSTACK_SECRET_KEY = os.environ.get('PAYSTACK_SECRET_KEY')
