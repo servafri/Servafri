@@ -10,7 +10,6 @@ app = Flask(__name__)
 app.config.from_object(Config)
 
 logging.debug("Initializing extensions.py")
-logging.debug(f"MONGO_URI: {app.config['MONGO_URI']}")
 
 # Initialize PyMongo
 mongo = PyMongo(app)
@@ -21,7 +20,6 @@ try:
     logging.info("MongoDB connection established successfully")
 except Exception as e:
     logging.error(f"Error connecting to MongoDB: {str(e)}")
-    logging.error(f"MONGO_URI: {app.config['MONGO_URI']}")
     mongo = None
 
 # Initialize LoginManager
