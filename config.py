@@ -21,6 +21,7 @@ class Config:
         else:
             MONGO_URI = mongo_uri
     else:
-        MONGO_URI = None
+        # Fallback to a local MongoDB instance if MONGO_URI is not set
+        MONGO_URI = "mongodb://localhost:27017/servafri_cloud"
     
     PAYSTACK_SECRET_KEY = os.environ.get('PAYSTACK_SECRET_KEY')

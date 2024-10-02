@@ -83,7 +83,7 @@ agentRequireRestartOnSave = false
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python main.py"
+args = "bash start_mongodb_and_app.sh"
 waitForPort = 5000
 
 [[workflows.workflow]]
@@ -164,7 +164,7 @@ task = "shell.exec"
 args = "python test_mongo_connection.py"
 
 [deployment]
-run = ["sh", "-c", "python main.py"]
+run = ["sh", "-c", "bash start_mongodb_and_app.sh"]
 
 [[ports]]
 localPort = 5000

@@ -16,27 +16,28 @@ logging.debug("Initializing extensions.py")
 # Initialize PyMongo with error handling
 mongo = None
 try:
-    mongo_uri = app.config.get('MONGO_URI')
-    if not mongo_uri:
-        raise ValueError("MONGO_URI is not set in the application config")
-    
-    parsed_uri = urlparse(mongo_uri)
-    logging.debug(f"Attempting to connect to MongoDB:")
-    logging.debug(f"  Scheme: {parsed_uri.scheme}")
-    logging.debug(f"  Hostname: {parsed_uri.hostname}")
-    logging.debug(f"  Port: {parsed_uri.port}")
-    logging.debug(f"  Username: {'*' * len(parsed_uri.username) if parsed_uri.username else 'None'}")
-    logging.debug(f"  Password: {'*' * 8 if parsed_uri.password else 'None'}")
-    logging.debug(f"  Database: {parsed_uri.path[1:] if parsed_uri.path else 'None'}")
-    
+    # Use local MongoDB instance by default
+    app.config['MONGO_URI'] = "mongodb://localhost:27017/servafri_cloud"
     mongo = PyMongo(app)
-    
-    # Test the connection
     mongo.db.command('ping')
-    logging.info("MongoDB connection established successfully")
-except Exception as e:
-    logging.error(f"Error connecting to MongoDB: {str(e)}")
-    logging.exception("Detailed MongoDB connection error:")
+    logging.info("Connected to local MongoDB instance successfully")
+except Exception as local_e:
+    logging.error(f"Error connecting to local MongoDB: {str(local_e)}")
+    logging.exception("Detailed local MongoDB connection error:")
+    
+    # Fallback to MongoDB Atlas if local connection fails
+    try:
+        mongo_uri = os.environ.get('MONGO_URI')
+        if mongo_uri:
+            app.config['MONGO_URI'] = mongo_uri
+            mongo = PyMongo(app)
+            mongo.db.command('ping')
+            logging.info("Connected to MongoDB Atlas successfully")
+        else:
+            raise ValueError("MONGO_URI environment variable is not set")
+    except Exception as atlas_e:
+        logging.error(f"Error connecting to MongoDB Atlas: {str(atlas_e)}")
+        logging.exception("Detailed MongoDB Atlas connection error:")
 
 # Initialize LoginManager
 login_manager = LoginManager(app)
