@@ -4,6 +4,7 @@ from flask_pymongo import PyMongo
 from flask_login import LoginManager
 from config import Config
 import os
+from urllib.parse import quote_plus
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -17,6 +18,18 @@ try:
     mongo_uri = os.environ.get('MONGO_URI')
     if not mongo_uri:
         raise ValueError("MONGO_URI environment variable is not set")
+    
+    # Parse the URI and escape username and password
+    parts = mongo_uri.split('://')
+    if len(parts) == 2:
+        auth_parts = parts[1].split('@')
+        if len(auth_parts) == 2:
+            user_pass, host_part = auth_parts
+            user, password = user_pass.split(':')
+            escaped_user = quote_plus(user)
+            escaped_password = quote_plus(password)
+            mongo_uri = f"{parts[0]}://{escaped_user}:{escaped_password}@{host_part}"
+    
     app.config['MONGO_URI'] = mongo_uri
     mongo = PyMongo(app)
     mongo.db.command('ping')
@@ -24,6 +37,7 @@ try:
 except Exception as e:
     logging.error(f"Error connecting to MongoDB: {str(e)}")
     logging.exception("Detailed MongoDB connection error:")
+    mongo = None
 
 # Initialize LoginManager
 login_manager = LoginManager(app)
