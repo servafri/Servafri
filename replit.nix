@@ -1,5 +1,6 @@
 {pkgs}: {
   deps = [
+    pkgs.agola
     pkgs.run
     pkgs.mongosh
     pkgs.mongodb
