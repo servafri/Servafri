@@ -18,7 +18,7 @@ try:
     mongo_uri = os.environ.get('MONGO_URI')
     if not mongo_uri:
         raise ValueError("MONGO_URI environment variable is not set")
-    
+
     # Parse the URI and escape username and password
     parts = mongo_uri.split('://')
     if len(parts) == 2:
@@ -29,12 +29,15 @@ try:
             escaped_user = quote_plus(user)
             escaped_password = quote_plus(password)
             mongo_uri = f"{parts[0]}://{escaped_user}:{escaped_password}@{host_part}"
-    
+
+    app.config['MONGO_URI'] = mongo_uri  # Set the parsed and escaped URI
+
     logging.debug(f"Attempting to connect to MongoDB with URI: {mongo_uri[:10]}...{mongo_uri[-10:]}")
-    app.config['MONGO_URI'] = mongo_uri
+
     mongo = PyMongo(app)
-    mongo.db.command('ping')
+    mongo.db.command('ping')  # Check if the connection works
     logging.debug("MongoDB connection successful")
+
 except Exception as e:
     logging.error(f"Error connecting to MongoDB: {str(e)}")
     logging.exception("Detailed MongoDB connection error:")
@@ -48,6 +51,10 @@ login_manager.login_view = 'auth.login'
 @login_manager.user_loader
 def load_user(user_id):
     try:
+        if mongo is None:
+            logging.error("Mongo is not initialized, cannot load user.")
+            return None
+
         user_data = mongo.db.users.find_one({"_id": user_id})
         if user_data:
             from models import User
