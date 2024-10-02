@@ -11,16 +11,15 @@ app.config.from_object(Config)
 
 logging.debug("Initializing extensions.py")
 
-# Initialize PyMongo
-mongo = PyMongo(app)
-
+# Initialize PyMongo with error handling
+mongo = None
 try:
+    mongo = PyMongo(app)
     # Test the connection
     mongo.db.command('ping')
     logging.info("MongoDB connection established successfully")
 except Exception as e:
     logging.error(f"Error connecting to MongoDB: {str(e)}")
-    mongo = None
 
 # Initialize LoginManager
 login_manager = LoginManager(app)

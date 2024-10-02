@@ -1,0 +1,23 @@
+DEBUG:root:Initializing extensions.py
+DEBUG:pymongo.topology:{"topologyId": {"$oid": "66fd031c01e2550c9c8d1bb5"}, "message": "Starting topology monitoring"}
+DEBUG:pymongo.topology:{"topologyId": {"$oid": "66fd031c01e2550c9c8d1bb5"}, "previousDescription": "<TopologyDescription id: 66fd031c01e2550c9c8d1bb5, topology_type: Unknown, servers: []>", "newDescription": "<TopologyDescription id: 66fd031c01e2550c9c8d1bb5, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.9a3xw.mongodb.net', 27017) server_type: Unknown, rtt: None>, <ServerDescription ('cluster0-shard-00-01.9a3xw.mongodb.net', 27017) server_type: Unknown, rtt: None>, <ServerDescription ('cluster0-shard-00-02.9a3xw.mongodb.net', 27017) server_type: Unknown, rtt: None>]>", "message": "Topology description changed"}
+DEBUG:pymongo.topology:{"topologyId": {"$oid": "66fd031c01e2550c9c8d1bb5"}, "serverHost": "cluster0-shard-00-02.9a3xw.mongodb.net", "serverPort": 27017, "message": "Starting server monitoring"}
+DEBUG:pymongo.topology:{"topologyId": {"$oid": "66fd031c01e2550c9c8d1bb5"}, "serverHost": "cluster0-shard-00-01.9a3xw.mongodb.net", "serverPort": 27017, "message": "Starting server monitoring"}
+DEBUG:pymongo.topology:{"topologyId": {"$oid": "66fd031c01e2550c9c8d1bb5"}, "serverHost": "cluster0-shard-00-00.9a3xw.mongodb.net", "serverPort": 27017, "message": "Starting server monitoring"}
+ERROR:root:Error connecting to MongoDB: 'NoneType' object has no attribute 'command'
+DEBUG:root:Finished initializing extensions.py
+ * Serving Flask app 'extensions'
+ * Debug mode: on
+INFO:werkzeug:WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.31.196.42:5000
+INFO:werkzeug:Press CTRL+C to quit
+INFO:werkzeug: * Restarting with stat
+DEBUG:root:Initializing extensions.py
+DEBUG:pymongo.topology:{"topologyId": {"$oid": "66fd031ecd234651bcfcd0f8"}, "message": "Starting topology monitoring"}
+DEBUG:pymongo.topology:{"topologyId": {"$oid": "66fd031ecd234651bcfcd0f8"}, "previousDescription": "<TopologyDescription id: 66fd031ecd234651bcfcd0f8, topology_type: Unknown, servers: []>", "newDescription": "<TopologyDescription id: 66fd031ecd234651bcfcd0f8, topology_type: ReplicaSetNoPrimary, servers: [<ServerDescription ('cluster0-shard-00-00.9a3xw.mongodb.net', 27017) server_type: Unknown, rtt: None>, <ServerDescription ('cluster0-shard-00-01.9a3xw.mongodb.net', 27017) server_type: Unknown, rtt: None>, <ServerDescription ('cluster0-shard-00-02.9a3xw.mongodb.net', 27017) server_type: Unknown, rtt: None>]>", "message": "Topology description changed"}
+DEBUG:pymongo.topology:{"topologyId": {"$oid": "66fd031ecd234651bcfcd0f8"}, "serverHost": "cluster0-shard-00-02.9a3xw.mongodb.net", "serverPort": 27017, "message": "Starting server monitoring"}
+DEBUG:pymongo.topology:{"topologyId": {"$oid": "66fd031ecd234651bcfcd0f8"}, "serverHost": "cluster0-shard-00-01.9a3xw.mongodb.net", "serverPort": 27017, "message": "Starting server monitoring"}
+DEBUG:pymongo.topology:{"topologyId": {"$oid": "66fd031ecd234651bcfcd0f8"}, "serverHost": "cluster0-shard-00-00.9a3xw.mongodb.net", "serverPort": 27017, "message": "Starting server monitoring"}
+ERROR:root:Error connecting to MongoDB: 'NoneType' object has no attribute 'command'
