@@ -47,6 +47,10 @@ args = "Create New Migration"
 task = "workflow.run"
 args = "Apply New Migration"
 
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Test MongoDB Connection"
+
 [[workflows.workflow]]
 name = "Run Flask App"
 author = "agent"
@@ -147,6 +151,17 @@ agentRequireRestartOnSave = false
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "export FLASK_APP=main.py && flask db upgrade"
+
+[[workflows.workflow]]
+name = "Test MongoDB Connection"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python test_mongo_connection.py"
 
 [deployment]
 run = ["sh", "-c", "python main.py"]
