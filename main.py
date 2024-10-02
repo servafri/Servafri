@@ -1,4 +1,4 @@
-from extensions import app, mongo
+from extensions import app, db
 from models import User
 from auth import auth as auth_blueprint
 from flask import redirect, url_for, send_from_directory
@@ -17,4 +17,6 @@ def serve_index():
     return app.send_static_file('index.html')
 
 if __name__ == '__main__':
+    with app.app_context():
+        db.create_all()
     app.run(host='0.0.0.0', port=5000, debug=True)
