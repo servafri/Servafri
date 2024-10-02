@@ -27,9 +27,25 @@ def test_mongo_connection():
         client.admin.command('ping')
         print("MongoDB connection successful!")
         
-        # List available databases
-        databases = client.list_database_names()
-        print("Available databases:", databases)
+        # List all collections in the database
+        db = client.get_default_database()
+        collections = db.list_collection_names()
+        print("Available collections:", collections)
+        
+        # Check if 'users' collection exists and count documents
+        if 'users' in collections:
+            users_count = db.users.count_documents({})
+            print(f"Number of documents in 'users' collection: {users_count}")
+            
+            # Print the first user document (without sensitive information)
+            first_user = db.users.find_one({}, {'password_hash': 0})
+            if first_user:
+                print("First user document (excluding password):")
+                print(first_user)
+            else:
+                print("No user documents found.")
+        else:
+            print("'users' collection does not exist.")
         
     except Exception as e:
         print(f"Error connecting to MongoDB: {str(e)}")
