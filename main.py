@@ -1,4 +1,5 @@
 import os
+from urllib.parse import quote_plus
 from extensions import app, mongo
 from models import User
 from auth import auth as auth_blueprint
@@ -6,7 +7,9 @@ from flask import redirect, url_for, send_from_directory
 import logging
 
 # Set MONGO_URI environment variable
-os.environ['MONGO_URI'] = 'mongodb+srv://servafri_cloud:6c3sSFoIGLgWc4wW@cluster1.9a3xw.mongodb.net/servafri_cloud?retryWrites=true&w=majority'
+username = quote_plus('servafri_cloud')
+password = quote_plus('6c3sSFoIGLgWc4wW')
+os.environ['MONGO_URI'] = f'mongodb+srv://{username}:{password}@cluster1.9a3xw.mongodb.net/servafri_cloud?retryWrites=true&w=majority'
 
 app.register_blueprint(auth_blueprint)
 
