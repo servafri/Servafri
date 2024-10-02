@@ -3,6 +3,7 @@ from flask import Flask
 from flask_pymongo import PyMongo
 from flask_login import LoginManager
 from config import Config
+import os
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -12,7 +13,17 @@ app.config.from_object(Config)
 logging.debug("Initializing extensions.py")
 
 # Initialize PyMongo
-mongo = PyMongo(app)
+try:
+    mongo_uri = os.environ.get('MONGO_URI')
+    if not mongo_uri:
+        raise ValueError("MONGO_URI environment variable is not set")
+    app.config['MONGO_URI'] = mongo_uri
+    mongo = PyMongo(app)
+    mongo.db.command('ping')
+    logging.info("MongoDB connection successful")
+except Exception as e:
+    logging.error(f"Error connecting to MongoDB: {str(e)}")
+    logging.exception("Detailed MongoDB connection error:")
 
 # Initialize LoginManager
 login_manager = LoginManager(app)
