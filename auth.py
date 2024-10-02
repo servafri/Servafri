@@ -38,18 +38,24 @@ def login():
         return redirect(url_for('auth.dashboard'))
     form = LoginForm()
     if form.validate_on_submit():
+        logging.debug(f"Attempting to retrieve user: {form.username.data}")
         user = User.get_user_by_username(form.username.data)
-        logging.debug(f"Login attempt for user: {form.username.data}")
-        if user is None or not user.check_password(form.password.data):
-            logging.debug(f"Invalid login attempt for user: {form.username.data}")
-            flash('Invalid username or password')
-            return redirect(url_for('auth.login'))
-        login_user(user)
-        logging.debug(f"User logged in successfully: {user.username}")
-        next_page = request.args.get('next')
-        if not next_page or urlparse(next_page).netloc != '':
-            next_page = url_for('auth.dashboard')
-        return redirect(next_page)
+        if user:
+            logging.debug(f"User found: {user.username}")
+            if user.check_password(form.password.data):
+                logging.debug(f"Password check successful for user: {user.username}")
+                login_user(user)
+                logging.debug(f"User logged in successfully: {user.username}")
+                next_page = request.args.get('next')
+                if not next_page or urlparse(next_page).netloc != '':
+                    next_page = url_for('auth.dashboard')
+                return redirect(next_page)
+            else:
+                logging.debug(f"Password check failed for user: {user.username}")
+        else:
+            logging.debug(f"User not found: {form.username.data}")
+        flash('Invalid username or password')
+        return redirect(url_for('auth.login'))
     return render_template('login.html', title='Sign In', form=form)
 
 @auth.route('/logout')

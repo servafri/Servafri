@@ -30,14 +30,16 @@ try:
             escaped_password = quote_plus(password)
             mongo_uri = f"{parts[0]}://{escaped_user}:{escaped_password}@{host_part}"
     
+    logging.debug(f"Attempting to connect to MongoDB with URI: {mongo_uri[:10]}...{mongo_uri[-10:]}")
     app.config['MONGO_URI'] = mongo_uri
     mongo = PyMongo(app)
     mongo.db.command('ping')
-    logging.info("MongoDB connection successful")
+    logging.debug("MongoDB connection successful")
 except Exception as e:
     logging.error(f"Error connecting to MongoDB: {str(e)}")
     logging.exception("Detailed MongoDB connection error:")
     mongo = None
+    logging.error("MongoDB connection failed")
 
 # Initialize LoginManager
 login_manager = LoginManager(app)
