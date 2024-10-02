@@ -6,7 +6,7 @@ from flask import redirect, url_for, send_from_directory
 import logging
 
 # Set MONGO_URI environment variable
-app.config['MONGO_URI'] = "mongodb+srv://servafricloud:6c3sSFoIGLgWc4wW@cluster1.9a3xw.mongodb.net/servafri_cloud?retryWrites=true&w=majority&appName=cluster1'
+os.environ['MONGO_URI'] = 'mongodb+srv://servafricloud:6c3sSFoIGLgWc4wW@cluster1.9a3xw.mongodb.net/servafri_cloud)'
 
 app.register_blueprint(auth_blueprint)
 
