@@ -3,11 +3,12 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-    <h1>Welcome, {{ current_user.username }}!</h1>
+    <h1>Welcome, {{ session.profile.name }}!</h1>
     <div class="dashboard-container">
         <section class="user-info">
             <h2>Your Account</h2>
-            <p>Current Balance: ₦{{ "%.2f"|format(current_user.balance or 0) }}</p>
+            <p>Email: {{ session.profile.email }}</p>
+            <p>Current Balance: ₦{{ "%.2f"|format(user.balance or 0) }}</p>
             <p>Total VMs: {{ vms|length }}</p>
         </section>
         <section class="vm-list">

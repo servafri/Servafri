@@ -34,6 +34,20 @@ files = [
 dev = ["black", "coverage", "isort", "pre-commit", "pyenchant", "pylint"]
 
 [[package]]
+name = "authlib"
+version = "1.3.2"
+description = "The ultimate Python library in building OAuth and OpenID Connect servers and clients."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "Authlib-1.3.2-py2.py3-none-any.whl", hash = "sha256:ede026a95e9f5cdc2d4364a52103f5405e75aa156357e831ef2bfd0bc5094dfc"},
+    {file = "authlib-1.3.2.tar.gz", hash = "sha256:4b16130117f9eb82aa6eec97f6dd4673c3f960ac0283ccdae2897ee4bc030ba2"},
+]
+
+[package.dependencies]
+cryptography = "*"
+
+[[package]]
 name = "azure-common"
 version = "1.1.28"
 description = "Microsoft Azure Client Library for Python (Common)"
@@ -496,6 +510,21 @@ Werkzeug = ">=3.0.0"
 [package.extras]
 async = ["asgiref (>=3.2)"]
 dotenv = ["python-dotenv"]
+
+[[package]]
+name = "flask-authlib-client"
+version = "0.0.1"
+description = "An extension to add support for separate resource server authentication to authlib"
+optional = false
+python-versions = "*"
+files = [
+    {file = "Flask-Authlib-Client-0.0.1.tar.gz", hash = "sha256:b35f4631195cfc1cc9c0909bce49673df9df8e7065c6335cc22af8bc0165d00d"},
+    {file = "Flask_Authlib_Client-0.0.1-py3-none-any.whl", hash = "sha256:9fae33edc3baf106b98f3155565e840efdcef6067f0c7aec4cc7a3bf3c260842"},
+]
+
+[package.dependencies]
+Authlib = "*"
+Flask = "*"
 
 [[package]]
 name = "flask-login"
@@ -1182,6 +1211,20 @@ files = [
 six = ">=1.5"
 
 [[package]]
+name = "python-dotenv"
+version = "1.0.1"
+description = "Read key-value pairs from a .env file and set them as environment variables"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "python-dotenv-1.0.1.tar.gz", hash = "sha256:e324ee90a023d808f1959c46bcbc04446a10ced277783dc6ee09987c37ec10ca"},
+    {file = "python_dotenv-1.0.1-py3-none-any.whl", hash = "sha256:f7b63ef50f1b690dddf550d03497b66d609393b40b564ed0d674909a68ebf16a"},
+]
+
+[package.extras]
+cli = ["click (>=5.0)"]
+
+[[package]]
 name = "pytz"
 version = "2024.2"
 description = "World timezone definitions, modern and historical"
@@ -1509,4 +1552,4 @@ email = ["email-validator"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "9f84010a45baa514d5594eaa5f3943cfbc62c263bb3cb067dc541f508023ad21"
+content-hash = "36b2a1fd760a2e08fa0ea2e57ca287a0231aec30a5afc870cb973e961cb78644"

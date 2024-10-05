@@ -1,9 +1,8 @@
 import logging
-from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
-from flask_login import login_user, logout_user, login_required, current_user
-from urllib.parse import urlparse
+from flask import Blueprint, render_template, redirect, url_for, flash, request, session
+from urllib.parse import urlparse, urlencode
 from models import User, VM, Payment
-from forms import LoginForm, SignupForm, VMProvisionForm, BillingForm
+from forms import VMProvisionForm, BillingForm
 from extensions import mongo
 from azure_utils import create_vm
 from paystackapi.paystack import Paystack
@@ -11,80 +10,37 @@ from datetime import datetime
 import requests
 import hmac
 import hashlib
+import os
 
 auth = Blueprint('auth', __name__)
 
-@auth.route('/signup', methods=['GET', 'POST'])
-def signup():
-    if current_user.is_authenticated:
-        return redirect(url_for('auth.dashboard'))
-    form = SignupForm()
-    if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data, password_hash='')
-        user.set_password(form.password.data)
-        try:
-            user.save()
-            logging.debug(f"User registered successfully: {user.username}")
-            flash('Your account has been created! You can now log in.', 'success')
-            return redirect(url_for('auth.login'))
-        except Exception as e:
-            logging.error(f"Error registering user: {str(e)}")
-            flash('An error occurred while registering. Please try again.', 'error')
-    return render_template('signup.html', form=form)
-
-@auth.route('/login', methods=['GET', 'POST'])
-def login():
-    if current_user.is_authenticated:
-        return redirect(url_for('auth.dashboard'))
-    form = LoginForm()
-    if form.validate_on_submit():
-        logging.debug(f"Attempting to retrieve user: {form.username.data}")
-        user = User.get_user_by_username(form.username.data)
-        if user:
-            logging.debug(f"User found: {user.username}")
-            if user.check_password(form.password.data):
-                logging.debug(f"Password check successful for user: {user.username}")
-                login_user(user)
-                logging.debug(f"User logged in successfully: {user.username}")
-                next_page = request.args.get('next')
-                if not next_page or urlparse(next_page).netloc != '':
-                    next_page = url_for('auth.dashboard')
-                return redirect(next_page)
-            else:
-                logging.debug(f"Password check failed for user: {user.username}")
-        else:
-            logging.debug(f"User not found: {form.username.data}")
-        flash('Invalid username or password')
-        return redirect(url_for('auth.login'))
-    return render_template('login.html', title='Sign In', form=form)
-
-@auth.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('auth.login'))
-
-@auth.route('/dashboard', methods=['GET'])
-@login_required
+@auth.route('/dashboard')
 def dashboard():
-    vms = VM.get_vms_by_user_id(current_user.get_id())
+    if 'profile' not in session:
+        return redirect(url_for('login'))
+    
+    user = User.get_user_by_email(session['profile']['email'])
+    vms = VM.get_vms_by_user_id(user.get_id())
     vm_form = VMProvisionForm()
     billing_form = BillingForm()
-    return render_template('dashboard.html', vms=vms, vm_form=vm_form, billing_form=billing_form)
+    return render_template('dashboard.html', user=user, vms=vms, vm_form=vm_form, billing_form=billing_form)
 
 @auth.route('/provision_vm', methods=['POST'])
-@login_required
 def provision_vm():
+    if 'profile' not in session:
+        return redirect(url_for('login'))
+    
     form = VMProvisionForm()
     if form.validate_on_submit():
         try:
+            user = User.get_user_by_email(session['profile']['email'])
             azure_vm = create_vm(form.name.data, form.cpu_cores.data, form.ram.data, form.disk_size.data, form.os_image.data)
             vm = VM(
                 name=azure_vm['name'],
                 cpu_cores=form.cpu_cores.data,
                 ram=form.ram.data,
                 disk_size=form.disk_size.data,
-                user_id=current_user.get_id(),
+                user_id=user.get_id(),
                 azure_id=azure_vm['id'],
                 ip_address=azure_vm['ip_address'],
                 os_image=form.os_image.data
@@ -98,12 +54,15 @@ def provision_vm():
     return redirect(url_for('auth.dashboard'))
 
 @auth.route('/payment', methods=['POST'])
-@login_required
 def payment():
+    if 'profile' not in session:
+        return redirect(url_for('login'))
+    
     form = BillingForm()
     if form.validate_on_submit():
         try:
-            paystack = Paystack(secret_key=current_app.config['PAYSTACK_SECRET_KEY'])
+            user = User.get_user_by_email(session['profile']['email'])
+            paystack = Paystack(secret_key=os.environ.get('PAYSTACK_SECRET_KEY'))
             response = paystack.transaction.initialize(
                 amount=int(form.amount.data * 100),
                 email=form.email.data,
@@ -111,7 +70,7 @@ def payment():
             )
             if response['status']:
                 payment = Payment(
-                    user_id=current_user.get_id(),
+                    user_id=user.get_id(),
                     amount=form.amount.data,
                     reference=response['data']['reference'],
                     status='pending',
@@ -134,18 +93,20 @@ def payment():
     return redirect(url_for('auth.dashboard'))
 
 @auth.route('/verify_payment')
-@login_required
 def verify_payment():
+    if 'profile' not in session:
+        return redirect(url_for('login'))
+    
     reference = request.args.get('reference')
     if reference:
         try:
-            paystack = Paystack(secret_key=current_app.config['PAYSTACK_SECRET_KEY'])
+            paystack = Paystack(secret_key=os.environ.get('PAYSTACK_SECRET_KEY'))
             response = paystack.transaction.verify(reference)
             if response['status']:
                 payment = mongo.db.payments.find_one({"reference": reference})
                 if payment:
                     mongo.db.payments.update_one({"_id": payment['_id']}, {"$set": {"status": "success"}})
-                    user = User.get_user_by_id(current_user.get_id())
+                    user = User.get_user_by_email(session['profile']['email'])
                     user.balance += payment['amount']
                     user.save()
                     flash('Payment successful! Your balance has been updated.', 'success')
@@ -171,7 +132,7 @@ def paystack_webhook():
     if not signature:
         return 'No signature', 400
 
-    secret = current_app.config['PAYSTACK_SECRET_KEY'].encode('utf-8')
+    secret = os.environ.get('PAYSTACK_SECRET_KEY').encode('utf-8')
     computed_signature = hmac.new(secret, payload, hashlib.sha512).hexdigest()
 
     if signature != computed_signature:
