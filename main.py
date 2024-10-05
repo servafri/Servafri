@@ -1,10 +1,11 @@
 import os
 from urllib.parse import quote_plus, urlencode
 import logging
-from flask import Flask, redirect, url_for, session, request, jsonify
+from flask import Flask, redirect, url_for, session, request, jsonify, render_template
 from authlib.integrations.flask_client import OAuth
 from dotenv import load_dotenv
-from extensions import app, login_manager
+from extensions import app, login_manager, mongo
+from models import User
 from auth import auth as auth_blueprint
 
 # Load environment variables
@@ -31,14 +32,13 @@ auth0 = oauth.register(
 
 @app.route('/')
 def home():
-    return redirect(url_for('auth.dashboard'))
+    return render_template('index.html')
 
 @app.route('/callback')
 def callback_handling():
     logging.debug("Callback route hit")
     try:
-        token = auth0.authorize_access_token()
-        session['auth0_token'] = token
+        auth0.authorize_access_token()
         resp = auth0.get('userinfo')
         userinfo = resp.json()
 
@@ -50,6 +50,16 @@ def callback_handling():
             'email': userinfo['email']
         }
 
+        # Check if user exists in the database, if not, create a new user
+        user = User.get_user_by_auth0_id(userinfo['sub'])
+        if not user:
+            new_user = User(
+                username=userinfo['name'],
+                email=userinfo['email'],
+                auth0_id=userinfo['sub']
+            )
+            new_user.save()
+
         logging.debug("User authenticated successfully")
         return redirect(url_for('auth.dashboard'))
     except Exception as e:
@@ -59,15 +69,17 @@ def callback_handling():
 @app.route('/login')
 def login():
     logging.debug("Login route hit")
-    callback_url = url_for('callback_handling', _external=True)
-    logging.debug(f"Callback URL: {callback_url}")
-    return auth0.authorize_redirect(redirect_uri=callback_url)
+    return auth0.authorize_redirect(redirect_uri=url_for('callback_handling', _external=True))
 
 @app.route('/logout')
 def logout():
     session.clear()
     params = {'returnTo': url_for('home', _external=True), 'client_id': os.environ.get("AUTH0_CLIENT_ID")}
     return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.get_user_by_auth0_id(user_id)
 
 app.register_blueprint(auth_blueprint)
 

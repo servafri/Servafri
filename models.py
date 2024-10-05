@@ -13,7 +13,7 @@ class User(UserMixin):
         self._id = _id if _id else ObjectId()
 
     def get_id(self):
-        return str(self._id)
+        return str(self.auth0_id)
 
     def save(self):
         user_data = {
@@ -23,11 +23,13 @@ class User(UserMixin):
             'balance': self.balance
         }
         try:
-            if self._id:
-                result = mongo.db.users.update_one({'_id': self._id}, {'$set': user_data})
-            else:
-                result = mongo.db.users.insert_one(user_data)
-                self._id = result.inserted_id
+            result = mongo.db.users.update_one(
+                {'auth0_id': self.auth0_id},
+                {'$set': user_data},
+                upsert=True
+            )
+            if result.upserted_id:
+                self._id = result.upserted_id
             logging.debug(f"User saved successfully: {self.username}")
         except Exception as e:
             logging.error(f"Error saving user: {str(e)}")

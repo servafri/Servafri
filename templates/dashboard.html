@@ -3,50 +3,21 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
-    <h1>Welcome, {{ session.profile.name }}!</h1>
+    <h1>Welcome, {{ user.name }}!</h1>
     <div class="dashboard-container">
         <section class="user-info">
             <h2>Your Account</h2>
-            <p>Email: {{ session.profile.email }}</p>
-            <p>Current Balance: ₦{{ "%.2f"|format(user.balance or 0) }}</p>
-            <p>Total VMs: {{ vms|length }}</p>
+            <p>Email: {{ user.email }}</p>
         </section>
         <section class="vm-list">
             <h2>Your Provisioned VMs</h2>
-            {% if vms %}
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>CPU Cores</th>
-                            <th>RAM (GB)</th>
-                            <th>Disk Size (GB)</th>
-                            <th>IP Address</th>
-                            <th>OS Image</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {% for vm in vms %}
-                        <tr>
-                            <td>{{ vm.name }}</td>
-                            <td>{{ vm.cpu_cores }}</td>
-                            <td>{{ vm.ram }}</td>
-                            <td>{{ vm.disk_size }}</td>
-                            <td>{{ vm.ip_address }}</td>
-                            <td>{{ vm.os_image }}</td>
-                            <td>{{ vm.status|default('Running', true) }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <p>You haven't provisioned any VMs yet.</p>
-            {% endif %}
+            <div id="vm-list">
+                <!-- VM list will be populated by JavaScript -->
+            </div>
         </section>
         <section class="provision-form">
             <h2>Provision a New VM</h2>
-            <form method="POST" action="{{ url_for('auth.provision_vm') }}">
+            <form id="vm-form" method="POST" action="{{ url_for('auth.provision_vm') }}">
                 {{ vm_form.hidden_tag() }}
                 <div class="form-group">
                     {{ vm_form.name.label }}
