@@ -9,10 +9,11 @@ from flask import redirect, url_for, send_from_directory
 # Set up logging
 logging.basicConfig(level=logging.DEBUG)
 
-# Set MONGO_URI environment variable
-username = quote_plus('servafricloud')
-password = quote_plus('6c3sSFoIGLgWc4wW')
-os.environ['MONGO_URI'] = f'mongodb+srv://{username}:{password}@cluster1.9a3xw.mongodb.net/servafri_cloud?retryWrites=true&w=majority'
+# Set MONGO_URI environment variable with properly escaped username and password
+username = quote_plus(os.environ.get('MONGO_USERNAME', 'servafricloud'))
+password = quote_plus(os.environ.get('MONGO_PASSWORD', '6c3sSFoIGLgWc4wW'))
+mongo_uri = f'mongodb+srv://{username}:{password}@cluster1.9a3xw.mongodb.net/servafri_cloud?retryWrites=true&w=majority'
+os.environ['MONGO_URI'] = mongo_uri
 
 app.register_blueprint(auth_blueprint)
 
