@@ -4,8 +4,7 @@ import logging
 from flask import Flask, redirect, url_for, session, request, jsonify
 from authlib.integrations.flask_client import OAuth
 from dotenv import load_dotenv
-from extensions import mongo, app, login_manager
-from models import User
+from extensions import app, login_manager
 from auth import auth as auth_blueprint
 
 # Load environment variables
@@ -50,16 +49,6 @@ def callback_handling():
             'picture': userinfo['picture'],
             'email': userinfo['email']
         }
-
-        # Check if user exists in the database, if not create a new user
-        user = User.get_user_by_email(userinfo['email'])
-        if not user:
-            new_user = User(
-                username=userinfo['name'],
-                email=userinfo['email'],
-                auth0_id=userinfo['sub']
-            )
-            new_user.save()
 
         logging.debug("User authenticated successfully")
         return redirect(url_for('auth.dashboard'))
