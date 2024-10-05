@@ -38,7 +38,8 @@ def home():
 def callback_handling():
     logging.debug("Callback route hit")
     try:
-        auth0.authorize_access_token()
+        token = auth0.authorize_access_token()
+        session['auth0_token'] = token
         resp = auth0.get('userinfo')
         userinfo = resp.json()
 
@@ -69,14 +70,14 @@ def callback_handling():
 @app.route('/login')
 def login():
     logging.debug("Login route hit")
-    callback_url = url_for('callback_handling', _external=True, _scheme='https')
+    callback_url = url_for('callback_handling', _external=True)
     logging.debug(f"Callback URL: {callback_url}")
     return auth0.authorize_redirect(redirect_uri=callback_url)
 
 @app.route('/logout')
 def logout():
     session.clear()
-    params = {'returnTo': url_for('home', _external=True, _scheme='https'), 'client_id': os.environ.get("AUTH0_CLIENT_ID")}
+    params = {'returnTo': url_for('home', _external=True), 'client_id': os.environ.get("AUTH0_CLIENT_ID")}
     return redirect(auth0.api_base_url + '/v2/logout?' + urlencode(params))
 
 app.register_blueprint(auth_blueprint)
